@@ -25,3 +25,17 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+* Install bootstrap3
+  npm install --save bootstrap@3
+* Angular Json
+# "node_modules/bootstrap/dist/css/bootstrap.min.css"
+* Ts Config
+# "strictPropertyInitialization": false,
+* Add Routing Module ( path should not have '/')
+* Import it in app module
+* Add router-outlet to the app component. Then it starts routing.
+* Add Shopping List service into providers of app module
+* Add &nbsp after button
+  <button class="btn btn-primary" type="button" (click)="onClear()">Clear</button> &nbsp;

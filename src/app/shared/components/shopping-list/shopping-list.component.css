@@ -1,0 +1,37 @@
+/* Set fixed widths for columns */
+.column-name {
+  width: 600px;
+}
+
+.column-amount {
+  width: 600px;
+}
+
+/* Optional: Make the table a little narrower and centered */
+.custom-table {
+  width: 100%;
+  margin: 0 auto;
+  /*background-color: #f0f0f0;*/
+}
+
+/* Hover effect on rows */
+.custom-row:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.table-container {
+  max-height: 450px;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+.filter-row-inputs {
+  display: flex;
+  gap: 1rem;
+  padding: 8px 0;
+}
+
+.filter-row input {
+  width: 100%;
+}

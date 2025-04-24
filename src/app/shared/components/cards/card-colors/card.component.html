@@ -1,0 +1,13 @@
+<div
+  class="custom-card clickable-card"
+  [ngClass]="getCardClass()"
+  (click)="onCardClick()">
+  <img *ngIf="imageUrl" [src]="imageUrl" alt="{{title}}" class="card-image" />
+  <h3 class="card-title">{{ title }}</h3>
+  <p class="card-content">{{ content }}</p>
+  <div class="card-footer" *ngIf="footer">
+    {{ footer }}
+  </div>
+</div>
+
+

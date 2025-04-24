@@ -1,0 +1,23 @@
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.table-container {
+  width: 500px;
+  overflow: auto;
+  padding-bottom: 60px;
+}
+
+.simple-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.simple-table th, .simple-table td {
+  width: 50%;
+  text-align: left;
+  padding: 8px 12px;
+  word-wrap: break-word;
+}

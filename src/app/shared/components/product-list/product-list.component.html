@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="row">
+<!--    <div class="col-xs-4">
+      <ul class="list-group">
+        <a class="list-group-item"
+           *ngFor="let product of products; let i = index"
+        >
+          {{i+1}} . {{product.name}}  |  {{product.price}}
+        </a>
+      </ul>-->
+    <div class="col-xs-12"  *ngIf="productsFound.length==0">
+      <div class="product-grid">
+        <div class="product-card" *ngFor="let product of products">
+          <!--<div class="discount-badge">{{ product.name }}% OFF</div>-->
+          <img [src]="product.imageLink" alt="{{ product.name }}" />
+          <div class="brand">Rewe</div>
+          <h4 class="product-name">{{ product.name }}</h4>
+
+          <!--
+                <select [(ngModel)]="product.selectedQuantity">
+                  <option *ngFor="let option of product.quantityOptions">{{ option }}</option>
+                </select>
+          -->
+
+          <div class="price">
+            <span class="discounted-price">₹{{ product.price }}</span>
+            <span class="original-price">₹{{ product.price }}</span>
+          </div>
+
+          <div class="card-footer">
+            <a (click)="addToWishlist(product)" style="cursor: pointer">
+              <span class="glyphicon glyphicon-bookmark"></span>
+            </a>
+            <button (click)="addToCart(product)">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12" *ngIf="productsFound.length!=0">
+<!--      <ul class="list-group" *ngIf="productsFound.length!=0">
+        <a class="list-group-item"
+           *ngFor="let product of productsFound; let i = index"
+        >
+          {{i+1}} . {{product.name}}  |  {{product.price}}
+        </a>
+      </ul>-->
+      <div class="product-grid">
+        <div class="product-card" *ngFor="let product of productsFound">
+          <!--<div class="discount-badge">{{ product.name }}% OFF</div>-->
+          <img [src]="product.imageLink" alt="{{ product.name }}" />
+          <div class="brand">Rewe</div>
+          <h4 class="product-name">{{ product.name }}</h4>
+
+          <!--
+                <select [(ngModel)]="product.selectedQuantity">
+                  <option *ngFor="let option of product.quantityOptions">{{ option }}</option>
+                </select>
+          -->
+
+          <div class="price">
+            <span class="discounted-price">₹{{ product.price }}</span>
+            <span class="original-price">₹{{ product.price }}</span>
+          </div>
+
+          <div class="card-footer">
+            <a (click)="addToWishlist(product)" style="cursor: pointer">
+              <span class="glyphicon glyphicon-bookmark"></span>
+            </a>
+            <button (click)="addToCart(product)">Add</button>
+          </div>
+        </div>
+      </div>
+      <!--<div class="drag-drop-container">
+        &lt;!&ndash; Left List &ndash;&gt;
+        <div class="list-container">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Source List</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div
+                cdkDropList
+                #leftList="cdkDropList"
+                [cdkDropListData]="leftItems"
+                [cdkDropListConnectedTo]="[rightList]"
+                class="item-list"
+                (cdkDropListDropped)="drop($event)"
+              >
+                <div
+                  *ngFor="let item of leftItems; trackBy: trackById"
+                  class="item-box"
+                  cdkDrag
+                  [cdkDragData]="item"
+                  [class.selected]="isSelected(item, 'left')"
+                  (click)="toggleSelect(item, 'left')"
+                >
+                  {{ item.name }}
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        &lt;!&ndash; Action Buttons &ndash;&gt;
+        <div class="action-buttons">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="moveSelectedToRight()"
+            [disabled]="!hasSelectedItems('left')"
+          >
+            <mat-icon>arrow_forward</mat-icon> Move to Right
+          </button>
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="moveSelectedToLeft()"
+            [disabled]="!hasSelectedItems('right')"
+          >
+            <mat-icon>arrow_back</mat-icon> Move to Left
+          </button>
+        </div>
+
+        &lt;!&ndash; Right List &ndash;&gt;
+        <div class="list-container">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Target List</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div
+                cdkDropList
+                #rightList="cdkDropList"
+                [cdkDropListData]="rightItems"
+                [cdkDropListConnectedTo]="[leftList]"
+                class="item-list"
+                (cdkDropListDropped)="drop($event)"
+              >
+                <div
+                  *ngFor="let item of rightItems; trackBy: trackById"
+                  class="item-box"
+                  cdkDrag
+                  [cdkDragData]="item"
+                  [class.selected]="isSelected(item, 'right')"
+                  (click)="toggleSelect(item, 'right')"
+                >
+                  {{ item.name }}
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>-->
+    </div>
+  </div>
+</div>
