@@ -8,6 +8,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {ProductSearch} from "../product-list/product-search.model";
 import {ProductListService} from "../product-list/product-list.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import { environment } from 'src/environments/environment';
 
 declare var paypal: any;
 
@@ -18,7 +19,8 @@ declare var paypal: any;
 })
 export class ShoppingListComponent implements OnInit, AfterViewInit {
 
-  yourPaypalSandboxClientId = 'Ae9Hcx388JWuvk9PypBO8iteGwm06-jOhZjxpAHktDyobKAslFOwnh6Apy8h15udU60ge9WGQUe9xROD';
+  yourPaypalSandboxClientId = environment.paypalSandboxClientId;
+  private apiUrl = environment.apiUrl;//http://localhost:5099/
   constructor(
     private slService: ShoppingListService,
     private plService: ProductListService,
@@ -119,7 +121,7 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
       this.loadPaypalScript().then(() => {
         paypal.Buttons({
           createOrder: (data: any, actions: any) => {
-            return fetch('http://localhost:5099/api/paypal/create-order', {
+            return fetch( this.apiUrl+'api/paypal/create-order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ value: '1.00' })
@@ -128,7 +130,7 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
               .then(order => order.id);
           },
           onApprove: (data: any, actions: any) => {
-            return fetch('http://localhost:5099/api/paypal/capture-order', {
+            return fetch(this.apiUrl+'api/paypal/capture-order', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ orderId: data.orderID })

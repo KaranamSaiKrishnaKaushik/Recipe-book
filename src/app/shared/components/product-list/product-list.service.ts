@@ -5,6 +5,7 @@ import {Product} from "./product.model";
 import {ProductSearch} from "./product-search.model";
 import {Item} from "../../Enums/Item";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ProductListService implements OnInit{
@@ -13,7 +14,8 @@ export class ProductListService implements OnInit{
   productsChanged = new Subject<Product[]>();
   productsFoundChanged = new Subject<Product[]>();
   subscription: Subscription;
-  url = 'http://localhost:5099/';
+  url = environment.apiUrl; //'http://localhost:5099/';
+  private apiUrl = environment.apiUrl;
   products : Product[] = [];
   productsFound: Product[] = [];
 
