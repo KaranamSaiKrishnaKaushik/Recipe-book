@@ -19,7 +19,7 @@ declare var paypal: any;
 })
 export class ShoppingListComponent implements OnInit, AfterViewInit {
 
-  yourPaypalSandboxClientId = environment.paypalSandboxClientId;
+  yourPaypalSandboxClientId = 'Ae9Hcx388JWuvk9PypBO8iteGwm06-jOhZjxpAHktDyobKAslFOwnh6Apy8h15udU60ge9WGQUe9xROD';
   private apiUrl = environment.apiUrl;//http://localhost:5099/
   constructor(
     private slService: ShoppingListService,
