@@ -2,6 +2,7 @@ import {Ingredient} from "../models/ingredient.model";
 import {Injectable, OnInit} from "@angular/core";
 import {Subject, Subscription, tap} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class ShoppingListService implements OnInit {
@@ -12,7 +13,8 @@ export class ShoppingListService implements OnInit {
   }
 
   subscription: Subscription;
-  url = 'http://localhost:5099/';
+  url = environment.apiUrl; //'http://localhost:5099/';
+  private apiUrl = environment.apiUrl;
 
   ngOnInit(): void {
     this.subscription = this.httpClient.get<Ingredient[]>(this.url + 'ingredients')
