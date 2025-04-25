@@ -5,6 +5,7 @@ import {Ingredient} from "../models/ingredient.model";
 import {Recipe} from "../models/recipe.model";
 import {BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DataApiService {
@@ -12,7 +13,7 @@ export class DataApiService {
               private slService: ShoppingListService,
               private recipeService: RecipeService) {
   }
-  url = 'http://localhost:5099/';
+  url = environment.apiUrl; //'http://localhost:5099/';
   recipes: Recipe[] = [];
   ingredients: Ingredient[];
   private ingredientsSubject = new BehaviorSubject<Ingredient[]>([]);

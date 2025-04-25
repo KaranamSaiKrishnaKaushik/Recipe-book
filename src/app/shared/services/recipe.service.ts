@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Subject, Subscription, tap} from "rxjs";
 import {ShoppingListService} from "./shopping-list.service";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class RecipeService{
@@ -12,20 +13,9 @@ export class RecipeService{
               private slService: ShoppingListService) {
   }
   subscription: Subscription;
-  url = 'http://localhost:5099/';
-  recipes: Recipe[] = [
-/*    new Recipe(
-      'Margarita',
-      'Pizza topped with our herb-infused signature pan sauce and 100% mozzarella cheese. A classic treat for all cheese lovers out there!',
-      'https://i.guim.co.uk/img/media/794dcaf94ad82a45ac1f288f79c062040346bd76/0_202_4288_2573/master/4288.jpg?width=1200&quality=85&auto=format&fit=max&s=5ce547caf726fc8445fbdf2f34e20809',
-      [
-        new Ingredient(new IngredientIdentity('Cheese'),2),
-        new Ingredient(new IngredientIdentity('Tomatoes'),3),
-        new Ingredient(new IngredientIdentity('Bread'),1),
-        new Ingredient(new IngredientIdentity('Garlic'),1),
-      ]
-    )*/
-  ];
+  url = environment.apiUrl; //'http://localhost:5099/';
+  private apiUrl = environment.apiUrl;
+  recipes: Recipe[] = [];
 
   onInit(){
     this.fetchRecipesFromDataSource();
