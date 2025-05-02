@@ -20,12 +20,21 @@ export class RecipeEditComponent implements OnInit {
   recipeSubscription: Subscription;
   editMode = false;
   id: number;
+  guid: any;
+  showAlert: boolean = false;
+  alertMessage: string = '';
+  alertType: string = 'success';
+
+  categoryOptions= [{ baseName: { name: 'Pizza' } }];
+  categoryName: string = '';
+  dropdownOpen: boolean = false;
+  filteredOptions: any[] = [];
+
   ngOnInit(): void {
     this.paramSubscription = this.route.params.subscribe(
       (params: Params)=>{
         this.id = +params['id'];
         this.editMode = params['id']!= null;
-
         this.recipeSubscription = this.recipeService.recipesChanged.subscribe(() => {
           if (this.editMode) {
             this.initForm();
@@ -37,6 +46,7 @@ export class RecipeEditComponent implements OnInit {
         } else {
           this.initForm();
         }
+        this.initForm();
       }
     );
   }
@@ -51,6 +61,7 @@ export class RecipeEditComponent implements OnInit {
 
     if(this.editMode){
         const recipe = this.recipeService.getRecipe(this.id);
+        this.guid = recipe.id;
         recipeName = recipe.name;
         recipeImagePath = recipe.imagePath;
         recipeDescription = recipe.description;
@@ -60,21 +71,25 @@ export class RecipeEditComponent implements OnInit {
         for(let ingredient of recipe.ingredients){
           recipeIngredients.push(
             new FormGroup({
-              'name': new FormControl(ingredient.baseName.name),
-              'amount': new FormControl(ingredient.amount)
+              baseName: new FormGroup({
+                name: new FormControl(ingredient.baseName.name)
+              }),
+              amount: new FormControl(ingredient.amount)
             })
           )
         }
       }
     }
     this.recipeForm = new FormGroup({
-      'name': new FormControl(recipeName),
-      'imagePath': new FormControl(recipeImagePath),
-      'description': new FormControl(recipeDescription),
-      'ingredients': recipeIngredients,
-      'instructions': new FormControl(recipeInstructions),
-      'category' : new FormControl(recipeCategory)
-    })
+      id: new FormControl(this.guid),
+      name: new FormControl(recipeName),
+      imagePath: new FormControl(recipeImagePath),
+      description: new FormControl(recipeDescription),
+      ingredients: recipeIngredients,
+      instructions: new FormControl(recipeInstructions),
+      category : new FormControl(recipeCategory)
+    });
+    this.categoryName = recipeCategory;
   }
 
   get controls(){
@@ -84,16 +99,27 @@ export class RecipeEditComponent implements OnInit {
   onSubmit(){
     if(this.editMode){
       console.log(this.recipeForm.value);
+      this.recipeService.updateRecipe(this.recipeForm.value);
+      this.showAlert = true;
+        this.alertMessage = 'Recipe updated successfully!';
+        this.alertType = 'success';
+        setTimeout(() => {
+          this.router.navigate(['../'], { relativeTo: this.route });
+        }, 2000);
+     // this.router.navigate(['../'], {relativeTo: this.route});
     }else{
+      console.log(this.recipeForm.value);
       this.recipeService.addRecipe(this.recipeForm.value);
     }
   }
 
   onAddIngredient(){
-    (this.recipeForm.get('ingredients') as FormArray).push(
+    (<FormArray>this.recipeForm.get('ingredients')).push(
       new FormGroup({
-        'name': new FormControl(null),
-        'amount': new FormControl(null)
+      baseName: new FormGroup({
+        name: new FormControl(null)
+      }),
+      amount: new FormControl(null)
       })
     );
   }
@@ -104,5 +130,28 @@ export class RecipeEditComponent implements OnInit {
 
   onDeleteIngredient(index: number){
     (this.recipeForm.get('ingredients') as FormArray).removeAt(index);
+  }
+
+  onCloseAlert() {
+    this.showAlert = false;
+  }
+
+  filterOptions() {
+    const query = this.categoryName.toLowerCase();
+    this.filteredOptions = this.categoryOptions.filter(option =>
+      option.baseName.name.toLowerCase().includes(query)
+    );
+  }
+  
+  selectOption(name: string) {
+    this.categoryName = name;
+    this.recipeForm.get('category')?.setValue(name);
+    this.dropdownOpen = false;
+  }
+  
+  closeDropdownWithDelay() {
+    setTimeout(() => {
+      this.dropdownOpen = false;
+    }, 150);
   }
 }

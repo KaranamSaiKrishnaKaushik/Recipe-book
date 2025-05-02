@@ -20,7 +20,7 @@ import {RecipeService} from "./shared/services/recipe.service";
 import {ShoppingListService} from "./shared/services/shopping-list.service";
 import {DropdownDirective} from "./core/directives/dropdown.directive";
 import {DataApiService} from "./shared/services/data-api.service";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatSortModule} from "@angular/material/sort";
@@ -34,6 +34,11 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import {MatIconModule} from "@angular/material/icon";
 import {CardComponent} from "./shared/components/cards/card-colors/card.component";
 import {RecipeCardsListComponent} from "./shared/components/cards/recipe-cards-list/recipe-cards-list.component";
+import { AuthComponent } from './shared/components/auth/auth.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { AuthInterceptorService } from './shared/components/auth/auth-interceptor.service';
+import { AuthGuard } from './shared/components/auth/auth.guard';
+import { AlertBoxComponent } from './shared/components/alert-box/alert-box.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +56,10 @@ import {RecipeCardsListComponent} from "./shared/components/cards/recipe-cards-l
     ProductListComponent,
     DragDropListsComponent,
     CardComponent,
-    RecipeCardsListComponent
+    RecipeCardsListComponent,
+    AuthComponent,
+    LoadingSpinnerComponent,
+    AlertBoxComponent
   ],
   imports: [
     FormsModule,
@@ -71,7 +79,16 @@ import {RecipeCardsListComponent} from "./shared/components/cards/recipe-cards-l
     DragDropModule,
     MatIconModule
   ],
-  providers: [RecipeService, ShoppingListService, DataApiService, ProductListService],
+  providers: [
+    RecipeService, 
+    ShoppingListService, 
+    DataApiService, 
+    ProductListService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass:AuthInterceptorService,
+      multi: true
+    }, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

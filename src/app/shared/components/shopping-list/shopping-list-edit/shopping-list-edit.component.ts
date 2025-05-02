@@ -11,7 +11,7 @@ import {Subscription} from "rxjs";
   styleUrls: ['./shopping-list-edit.component.css']
 })
 export class ShoppingListEditComponent implements OnInit {
-
+  
   constructor(private slService: ShoppingListService) { }
   @ViewChild('f') slForm: NgForm;
   editMode= false;
@@ -19,6 +19,11 @@ export class ShoppingListEditComponent implements OnInit {
   editedItem: Ingredient;
   subscription: Subscription;
   ingredient: Ingredient;
+  ingredientOptions: Ingredient[] = [];
+
+ingredientName: string = '';
+dropdownOpen: boolean = false;
+filteredOptions: any[] = [];
   ngOnInit(): void {
     this.subscription = this.slService.startedEditing.subscribe(
       (index: number)=>{
@@ -31,6 +36,27 @@ export class ShoppingListEditComponent implements OnInit {
         })
       }
     );
+    this.slService.ingredientsChanged.subscribe((ingredients)=>{
+      this.ingredientOptions = ingredients;
+    });
+  }
+
+  filterOptions() {
+    const query = this.ingredientName.toLowerCase();
+    this.filteredOptions = this.ingredientOptions.filter(option =>
+      option.baseName.name.toLowerCase().includes(query)
+    );
+  }
+  
+  selectOption(name: string) {
+    this.ingredientName = name;
+    this.dropdownOpen = false;
+  }
+  
+  closeDropdownWithDelay() {
+    setTimeout(() => {
+      this.dropdownOpen = false;
+    }, 150);
   }
 
   onsubmit(form: NgForm){

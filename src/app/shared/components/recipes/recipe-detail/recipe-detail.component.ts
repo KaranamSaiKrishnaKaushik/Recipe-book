@@ -29,8 +29,21 @@ export class RecipeDetailComponent implements OnInit {
       (params: Params)=>{
         this.id = +params['id'];
         this.editMode = true;
-        this.recipe = this.recipeService.getRecipe(this.id);
-        this.dataSource.data = this.recipe.ingredients;
+        const recipe = this.recipeService.getRecipe(this.id);
+        if (recipe) {
+          this.recipe = recipe;
+          this.dataSource.data = this.recipe.ingredients;
+        } else {
+          this.recipeService.getAllRecipesFromDataSource().subscribe((recipes) => {
+            this.recipe = this.recipeService.getRecipe(this.id);
+            if (this.recipe) {
+              this.dataSource.data = this.recipe.ingredients;
+            } else {
+              console.error('Recipe not found after refetch');
+            }
+        });
+        
+      }
         console.log(this.dataSource.data);
       }
     );

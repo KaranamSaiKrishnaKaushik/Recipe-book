@@ -1,8 +1,8 @@
 import {Recipe} from "../models/recipe.model";
 import {Ingredient} from "../models/ingredient.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {Subject, Subscription, tap} from "rxjs";
+import {Observable, Subject, Subscription, tap} from "rxjs";
 import {ShoppingListService} from "./shopping-list.service";
 import { environment } from 'src/environments/environment';
 
@@ -42,15 +42,41 @@ export class RecipeService{
       });
   }
 
+  updateRecipe(recipe: Recipe){
+    this.httpClient
+      .post(this.url + 'update-recipe', recipe)
+      .pipe(
+        tap(()=>{
+          this.fetchRecipesFromDataSource()
+        })
+      )
+      .subscribe(response=>{
+        console.log(response);
+      });
+  }
+
   fetchRecipesFromDataSource(){
     this.httpClient
       .get<Recipe[]>(this.url+'fetch-all-recipes')
      .subscribe(recipes=>{
+      console.log('recipes: ', recipes)
        this.recipes = recipes;
        this.recipesChanged.next(this.recipes);
      });
     return this.recipes.slice();
   }
+
+  getAllRecipesFromDataSource(): Observable<Recipe[]> {
+    return this.httpClient
+      .get<Recipe[]>(this.url + 'fetch-all-recipes')
+      .pipe(
+        tap(recipes => {
+          this.recipes = recipes;
+          this.recipesChanged.next(this.recipes);
+        })
+      );
+  }
+  
 
   addIngredientsToShoppingList(ingredients: Ingredient[]){
     this.slService.addMultipleIngredientsToList(ingredients);

@@ -1,0 +1,16 @@
+.dropdown-menu {
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ccc;
+  }
+  
+  .dropdown-item {
+    cursor: pointer;
+    padding: 8px 12px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f1f1f1;
+  }
+  
