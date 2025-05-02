@@ -10,8 +10,26 @@
               ngModel
               name="name"
               class="form-control"
+              [(ngModel)]="ingredientName"
+              (input)="filterOptions()"
+              (focus)="dropdownOpen = true"
+              (blur)="closeDropdownWithDelay()"
+              autocomplete="off"
               required
             >
+            <ul
+            *ngIf="dropdownOpen && filteredOptions.length"
+            class="dropdown-menu show w-100"
+            style="position: absolute; top: 100%; z-index: 1000;"
+          >
+            <li
+              class="dropdown-item"
+              *ngFor="let option of filteredOptions"
+              (mousedown)="selectOption(option.baseName.name)"
+            >
+              {{ option.baseName.name }}
+            </li>
+          </ul>
           </div>
           <div class="col-sm-3">
             <label for="amount">Amount</label>

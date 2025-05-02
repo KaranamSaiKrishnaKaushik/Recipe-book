@@ -1,0 +1,6 @@
+.recipe-list-container {
+    max-height: calc(100vh - 150px); 
+    overflow-y: auto;
+    padding-right: 10px; /* optional: spacing for scrollbar */
+  }
+  

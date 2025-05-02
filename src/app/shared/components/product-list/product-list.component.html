@@ -23,15 +23,15 @@
           -->
 
           <div class="price">
-            <span class="discounted-price">₹{{ product.price }}</span>
-            <span class="original-price">₹{{ product.price }}</span>
+            <span class="discounted-price">{{ product.price }}</span>
+            <span class="original-price">{{ product.price }}</span>
           </div>
 
           <div class="card-footer">
             <a (click)="addToWishlist(product)" style="cursor: pointer">
               <span class="glyphicon glyphicon-bookmark"></span>
             </a>
-            <button (click)="addToCart(product)">Add</button>
+            <button class="btn btn-primary" (click)="addToCart(product)">Add</button>
           </div>
         </div>
       </div>
@@ -55,18 +55,20 @@
                 <select [(ngModel)]="product.selectedQuantity">
                   <option *ngFor="let option of product.quantityOptions">{{ option }}</option>
                 </select>
+
+                <span class="discounted-price">₹{{ product.price }}</span>
           -->
 
           <div class="price">
-            <span class="discounted-price">₹{{ product.price }}</span>
-            <span class="original-price">₹{{ product.price }}</span>
+            <span class="discounted-price">{{ product.price }}</span>
+            <span class="original-price">{{ product.price }}</span>
           </div>
 
           <div class="card-footer">
             <a (click)="addToWishlist(product)" style="cursor: pointer">
               <span class="glyphicon glyphicon-bookmark"></span>
             </a>
-            <button (click)="addToCart(product)">Add</button>
+            <button class="btn btn-primary" (click)="addToCart(product)">Add</button>
           </div>
         </div>
       </div>

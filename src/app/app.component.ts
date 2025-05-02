@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './shared/components/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'RecipeBook';
+  constructor(private authService: AuthService){}
+
+  ngOnInit(): void {
+    this.authService.autoLogin();
+  }
 }
