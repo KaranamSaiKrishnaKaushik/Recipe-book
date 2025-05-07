@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'https://kitchen-recipes-api-fvacd4b5esh5ezax.germanywestcentral-01.azurewebsites.net/', //'http://localhost:5099/',
-  paypalSandBoxId: "Ae9Hcx388JWuvk9PypBO8iteGwm06-jOhZjxpAHktDyobKAslFOwnh6Apy8h15udU60ge9WGQUe9xROD",
+  paypalSandboxClientId: 'Ae9Hcx388JWuvk9PypBO8iteGwm06-jOhZjxpAHktDyobKAslFOwnh6Apy8h15udU60ge9WGQUe9xROD',
   firebase: {
     apiKey: "AIzaSyBYiivFgH-eJ7k6GamIdwvhoUVLhgHukwU",
     authDomain: "ng-recipe-book-01-2ff9b.firebaseapp.com",
