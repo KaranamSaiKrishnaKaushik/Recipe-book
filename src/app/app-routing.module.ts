@@ -10,6 +10,7 @@ import {DragDropListsComponent} from "./shared/components/drag-drop-lists/drag-d
 import {CardComponent} from "./shared/components/cards/card-colors/card.component";
 import {RecipeCardsListComponent} from "./shared/components/cards/recipe-cards-list/recipe-cards-list.component";
 import { AuthComponent } from "./shared/components/auth/auth.component";
+import { SettingsComponent } from "./shared/components/settings/settings.component";
 
 const appRoutes : Routes = [
 
@@ -26,7 +27,8 @@ const appRoutes : Routes = [
   { path: 'shopping-list', component: ShoppingListComponent},
   { path: 'product-list', component: ProductListComponent},
   { path: 'drag-drop-list', component: DragDropListsComponent},
-  { path: 'auth', component: AuthComponent }
+  { path: 'auth', component: AuthComponent },
+  { path: 'settings', component: SettingsComponent }
 ];
 
 @NgModule({

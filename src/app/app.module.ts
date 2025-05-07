@@ -39,6 +39,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { AuthInterceptorService } from './shared/components/auth/auth-interceptor.service';
 import { AuthGuard } from './shared/components/auth/auth.guard';
 import { AlertBoxComponent } from './shared/components/alert-box/alert-box.component';
+import { SettingsComponent } from './shared/components/settings/settings.component';
+import { SettingsService } from './shared/services/settings.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,8 @@ import { AlertBoxComponent } from './shared/components/alert-box/alert-box.compo
     RecipeCardsListComponent,
     AuthComponent,
     LoadingSpinnerComponent,
-    AlertBoxComponent
+    AlertBoxComponent,
+    SettingsComponent
   ],
   imports: [
     FormsModule,
@@ -82,7 +85,8 @@ import { AlertBoxComponent } from './shared/components/alert-box/alert-box.compo
   providers: [
     RecipeService, 
     ShoppingListService, 
-    DataApiService, 
+    DataApiService,
+    SettingsService ,
     ProductListService,
     {
       provide: HTTP_INTERCEPTORS,

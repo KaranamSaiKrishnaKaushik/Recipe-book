@@ -1,0 +1,226 @@
+<div class="settings-container">
+    <div class="sidebar">
+      <div class="profile-initial">{{intitails}}</div>
+      <div class="profile-name">
+        <strong>{{fullName}}</strong>
+      </div>
+      <ul class="nav-items">
+        <li *ngFor="let item of menuItems" [class.active]="item === selectedMenu" (click)="selectMenu(item)">
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+  
+    <!-- Profile Form Section -->
+<div class="settings-content" *ngIf="selectedMenu === 'Profile'">
+    <h2>Public profile</h2>
+    <p>Add information about yourself</p>
+    <hr />
+    <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
+      <h4>Basics:</h4>
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" formControlName="userFirstName" />
+      </div>
+  
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" formControlName="userLastName" />
+      </div>
+  
+      <div class="form-group">
+        <label>Headline</label>
+        <input type="text" formControlName="headline" maxlength="60" />
+        <small>Add a professional headline like, “Chef at a Michelin star Restaurant” or Master Chef.”</small>
+      </div>
+  
+      <div class="form-group">
+        <label>Biography</label>
+        <textarea formControlName="biography" rows="4"></textarea>
+        <small>Something about your background.</small>
+      </div>
+  
+      <div class="form-group">
+        <label>Language</label>
+        <select formControlName="language">
+          <option value="en">English (US)</option>
+          <option value="de">German (DE)</option>
+          <option value="fr">French (FR)</option>
+        </select>
+      </div>
+  
+      <h4>Links:</h4>
+      <div class="form-group">
+        <label>Website</label>
+        <input type="url" formControlName="website" placeholder="http(s)://" />
+      </div>
+  
+      <div class="form-group">
+        <label>Facebook</label>
+        <input type="text" formControlName="facebookUserName" placeholder="Username" />
+      </div>
+  
+      <div class="form-group">
+        <label>Instagram</label>
+        <input type="text" formControlName="instagramUserName" placeholder="Username" />
+      </div>
+  
+      <div class="form-group">
+        <label>LinkedIn</label>
+        <input type="url" formControlName="linkedInPublicProfileUrl" placeholder="Public Profile URL" />
+      </div>
+  
+      <div class="form-group">
+        <label>TikTok</label>
+        <input type="text" formControlName="tiktokUserName" placeholder="@username" />
+      </div>
+  
+      <div class="form-group">
+        <label>X.com (Twitter)</label>
+        <input type="text" formControlName="twitterUserName" placeholder="Username" />
+      </div>
+  
+      <div class="form-group">
+        <label>YouTube</label>
+        <input type="text" formControlName="youtubeUserName" placeholder="Username" />
+      </div>
+  
+      <button class="primary-btn" type="submit" [disabled]="profileForm.invalid">Save</button>
+    </form>
+  </div>
+  
+
+    <div class="settings-content" *ngIf="selectedMenu === 'Account Security'">
+      <h2>Account</h2>
+      <p>Edit your account settings and change your password here.</p>
+      <hr />
+      <form [formGroup]="accountForm" (ngSubmit)="onChangePasswordSubmit()">
+        <label>Email:</label>
+        <div class="email-box">
+          <input type="text" formControlName="email" readonly />
+          <button type="button" class="edit-btn">
+            ✎
+          </button>
+        </div>
+  
+        <div class="form-group">
+          <label>Current password</label>
+          <input type="password" formControlName="currentPassword" />
+        </div>
+  
+        <div class="form-group">
+          <label>New password</label>
+          <input type="password" formControlName="newPassword" />
+        </div>
+  
+        <div class="form-group">
+          <label>Confirm new password</label>
+          <input type="password" formControlName="confirmPassword" />
+        </div>
+  
+        <button type="submit" class="primary-btn" [disabled]="accountForm.invalid">Change password</button>
+         <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType" (close)="onCloseAlert()"></app-alert-box>
+ 
+      </form>
+  
+      <!-- <div class="mfa-box">
+        <h4>Multi-factor Authentication</h4>
+        <p>
+          Increase your account security by requiring that a code emailed to you be entered when you log in. For more
+          information on how multi-factor authentication works, refer to our <a href="#">Help Center article</a>.
+        </p>
+        <button class="mfa-btn">Enable</button>
+      </div> -->
+    </div>
+
+<div class="settings-content" *ngIf="selectedMenu === 'Photo'">
+    <h2>Profile Photo</h2>
+    <hr />
+    <form [formGroup]="photoForm" (ngSubmit)="onPhotoSubmit()">
+        
+      <div class="form-group">
+        <div *ngIf="photoPreview" class="image-preview">
+            <p>Image Preview</p>
+            <img [src]="photoPreview" alt="Image preview" style="height: 300px;"/>
+        </div>
+
+        <label for="photo">Add/ Change Image</label>
+        <input
+          type="file"
+          id="photo"
+          (change)="onPhotoSelected($event)"
+          accept="image/*"
+        />
+      </div>
+  
+      <br>
+      <button class="primary-btn" type="submit" [disabled]="photoForm.invalid || !photoPreview">
+        Save Photo
+      </button>
+    </form>
+  </div>
+  
+<div class="settings-content" *ngIf="selectedMenu === 'Address'">
+    <h2>Address</h2>
+    <p>Update your address information below.</p>
+    <hr />
+    <form [formGroup]="addressForm" (ngSubmit)="onAddressSubmit()">
+      <div class="form-group">
+        <label>Street Address</label>
+        <input 
+        type="text" 
+        formControlName="streetAddress" />
+      </div>
+  
+      <div class="form-group">
+        <label>House Number</label>
+        <input type="text" formControlName="houseNumber" />
+      </div>
+  
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" formControlName="city" />
+      </div>
+  
+      <div class="form-group">
+        <label>State</label>
+        <input type="text" formControlName="state" />
+      </div>
+  
+      <div class="form-group">
+        <label>Zip Code</label>
+        <input type="text" formControlName="ZipCode" />
+      </div>
+  
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" formControlName="country" />
+      </div>
+  
+      <button class="primary-btn" type="submit" [disabled]="addressForm.invalid">Save Address</button>
+    </form>
+  </div>
+
+  <div class="settings-content" *ngIf="selectedMenu === 'Subscriptions'">
+    <h2>Subscriptions</h2>
+    <hr />
+    <p>You currently do not posses any subscriptions!</p>
+  </div>
+
+  <div class="settings-content" *ngIf="selectedMenu === 'Payment methods'">
+    <h2>Payment methods</h2>
+    <hr />
+    <p>You don't have any yet. Feel free to add payment methods</p>
+    <button class="primary-btn" (click)="onAddPaymentMethod()">
+        Add Payment method
+      </button>
+  </div>
+
+  <div class="settings-content" *ngIf="selectedMenu === 'Close account'">
+    <h2>Close account</h2>
+    <hr />
+    <p>Would you like to completely close your account?</p>
+  </div>
+  
+  </div>
+  
