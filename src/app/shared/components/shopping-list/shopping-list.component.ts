@@ -19,8 +19,8 @@ declare var paypal: any;
 })
 export class ShoppingListComponent implements OnInit, AfterViewInit {
 
-  yourPaypalSandboxClientId = 'Ae9Hcx388JWuvk9PypBO8iteGwm06-jOhZjxpAHktDyobKAslFOwnh6Apy8h15udU60ge9WGQUe9xROD';
-  private apiUrl = environment.apiUrl;//http://localhost:5099/
+  paypalSandboxClientId = environment.paypalSandboxClientId;
+  private apiUrl = environment.apiUrl;
   constructor(
     private slService: ShoppingListService,
     private plService: ProductListService,
@@ -180,7 +180,7 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
 
       // Otherwise, dynamically add the PayPal script to <head> or <body>
       const script = document.createElement('script');
-      script.src = 'https://www.paypal.com/sdk/js?client-id='+this.yourPaypalSandboxClientId+'&currency=EUR';
+      script.src = 'https://www.paypal.com/sdk/js?client-id='+this.paypalSandboxClientId+'&currency=EUR';
       script.onload = () => resolve();
       document.body.appendChild(script);
     });

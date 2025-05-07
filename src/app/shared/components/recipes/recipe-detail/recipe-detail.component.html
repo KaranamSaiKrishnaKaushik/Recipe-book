@@ -13,8 +13,8 @@
     <div class="btn-group" appDropdown>
       <button class="btn btn-primary dropdown-toggle">Manage Recipe <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li><a  style="cursor: pointer" (click)="onAddToShoppingList()">To Shopping List</a></li>
-        <li><a  style="cursor: pointer" (click)="onEditRecipe()">Edit Recipe</a></li>
+        <li><a style="cursor: pointer" (click)="onAddToShoppingList()">To Shopping List</a></li>
+        <li><a style="cursor: pointer" (click)="onEditRecipe()">Edit Recipe</a></li>
         <li><a style="cursor: pointer" (click)="onDeleteRecipe()">Delete Recipe</a></li>
       </ul>
     </div>
@@ -31,13 +31,11 @@
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 simple-table" multiTemplateDataRows>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.baseName.name}} </td>
       </ng-container>
 
-      <!-- Amount Column -->
       <ng-container matColumnDef="amount">
         <th mat-header-cell *matHeaderCellDef> Amount </th>
         <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
@@ -56,7 +54,6 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <p>{{recipe.instructions}}</p>
+    <p style="white-space: pre-line;">{{recipe.instructions}}</p>
   </div>
 </div>
-

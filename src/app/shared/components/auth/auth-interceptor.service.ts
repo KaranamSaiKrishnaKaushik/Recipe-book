@@ -12,7 +12,6 @@ export class AuthInterceptorService implements HttpInterceptor{
     req: HttpRequest<any>,
     next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.user.pipe(
-      //filter((user): user is User => !!user && !!user.token),
       take(1),
       exhaustMap(user => {
         if(!user){

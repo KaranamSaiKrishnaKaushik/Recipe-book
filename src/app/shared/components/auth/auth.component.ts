@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthResponseData, AuthService} from "./auth.service";
+import {AuthService} from "./auth.service";
 import {endWith, Observable} from "rxjs";
 import {Router} from "@angular/router";
+import { UserCredential } from 'firebase/auth';
 
 @Component({
   selector: 'app-auth',
@@ -30,7 +31,7 @@ export class AuthComponent implements OnInit{
     const email = form.value.email;
     const password =  form.value.password;
 
-    let authObservable: Observable<AuthResponseData>;
+    let authObservable: Observable<UserCredential>;
     if(this.isLoginMode){
       authObservable = this.authService.login(email, password);
     }else{
@@ -58,7 +59,7 @@ export class AuthComponent implements OnInit{
       if (this.aForm) {
         this.aForm.setValue({
           email: 'test@test.com',
-          password: '123456'
+          password: 'Boston100$'
         });
       }
     }, 500);

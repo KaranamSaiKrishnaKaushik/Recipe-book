@@ -6,11 +6,11 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./alert-box.component.css']
 })
 export class AlertBoxComponent {
-  @Input() message: string = ''; // Message to display in the alert box
-  @Input() type: string = 'success'; // Alert type: success, error, info, warning
-  @Input() duration: number = 5000; // Duration in milliseconds to show the alert
+  @Input() message: string = ''; 
+  @Input() type: string = 'success'; 
+  @Input() duration: number = 5000;
   
-  showAlert: boolean = true; // To control the visibility of the alert
+  showAlert: boolean = true;
 
   ngOnInit() {
     setTimeout(() => {
@@ -19,6 +19,6 @@ export class AlertBoxComponent {
   }
   
   closeAlert() {
-    this.showAlert = false; // Manually close the alert
+    this.showAlert = false;
   }
 }
