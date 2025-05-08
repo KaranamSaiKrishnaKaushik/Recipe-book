@@ -25,6 +25,7 @@ export class RecipeListComponent implements OnInit {
       this.recipes = recipes;
     })
     console.log(this.recipes);
+    console.log('Hello here is the recipes list');
   }
 
   onNewRecipe() {
