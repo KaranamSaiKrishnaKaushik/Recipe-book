@@ -22,16 +22,22 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
       - name: Check if token is present
         run: |
           echo "Token length: ${#AZURE_STATIC_WEB_APPS_API_TOKEN}"
         env:
           AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+
       - name: List Azure Static Web Apps
         run: |
           az staticwebapp list --query "[].name"
-        env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
