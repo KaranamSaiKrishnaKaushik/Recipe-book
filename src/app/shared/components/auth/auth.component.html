@@ -1,45 +1,154 @@
-<div class="row">
-    <div class="col-xs-12 col-md-6 col-md-offset-3">
+<div class="auth-container">
+  <div class="auth-image-side"></div>
+
+  <div class="auth-content-side">
+    <div class="auth-box">
+      <h1>Register or Login</h1>
+      <p class="lead"><strong>Join Today to Start Saving Your Favorite Recipes!</strong></p>
+
+      <hr />
+
+      <h3 class="has-text-align-center">Already Registered?</h3>
+
+      <p *ngIf="!isLoginMode" style="text-align: center; margin: 1rem 0;">
+        <span (click)="onSwitchMode()" 
+        style="text-decoration: underline; text-align: center; cursor: pointer;">
+          Login to your account here
+        </span>
+      </p>
+
       <div *ngIf="error" class="alert alert-danger">
         <p>{{error}}</p>
       </div>
-      <div *ngIf="isLoading" style="text-align: center">
+      <div *ngIf="isLoading && isLoginMode" style="text-align: center">
         <app-loading-spinner></app-loading-spinner>
       </div>
-      <form (ngSubmit)="onSubmit(authForm)" #authForm="ngForm"  *ngIf="!isLoading">
-        <div class="form-group">
-          <label for="email">E-Mail</label>
-          <input
-            type="email"
-            id="email"
-            class="form-control"
-            name="email"
-            ngModel
-            required
-            email
-          />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            class="form-control"
-            name="password"
-            ngModel
-            required
-            minlength="6" />
-        </div>
-        <div>
-          <button
-            class="btn btn-primary"
-            type="submit"
-            [disabled]="!authForm.valid"
-          >{{isLoginMode? 'Login': 'Sign Up'}}</button> |
-          <button class="btn btn-primary" type="button" (click)="onSwitchMode()">
-            Switch to {{isLoginMode? 'Sign Up': 'Login'}}</button>
-        </div>
-      </form>
+      <div *ngIf="authForm && isLoginMode">
+        <form (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">	 	 
+          <div class="form-group">
+            <label for="email">E-Mail</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              name="email"
+              ngModel
+              required
+              email
+            />
+            <div *ngIf="authForm.controls['email']?.invalid" class="validation-message">
+              Email is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              name="password"
+              ngModel
+              required
+              minlength="6"
+            />
+            <div *ngIf="authForm.controls['password']?.invalid" class="validation-message">
+              Password is required
+            </div>
+          </div>
+          <div>
+            <button type="submit" class="btn-submit" [disabled]="!authForm.valid">Login</button>
+          </div>
+        </form>
+      </div>
+      <hr />
+
+      <h3 class="has-text-align-center">Don’t Have an Account Yet?</h3>
+      <p class="description">
+        Create a Recipe Book account using the form below to easily save your favorite content, so you never forget a recipe again. Once you save a recipe, you can access it on any device after you login.
+      </p>
+      <p *ngIf="isLoginMode" style="text-align: center; margin: 1rem 0;">
+        <span (click)="onSwitchMode()" 
+        style="text-decoration: underline; text-align: center; cursor: pointer;">
+        Register here
+        </span>
+      </p>
+      <div *ngIf="isLoading && !isLoginMode" style="text-align: center">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+      <div *ngIf="authForm && !isLoginMode">
+        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input 
+              name="firstName" 
+              id="firstName" 
+              ngModel 
+              class="form-control"
+              required 
+              />
+              <div *ngIf="authForm.controls['firstName']?.invalid" class="validation-message">
+                First Name is required
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input 
+              name="lastName" 
+              id="lastName" 
+              class="form-control"
+              ngModel 
+              required 
+              />
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="email">E-Mail</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              name="email"
+              ngModel
+              required
+              email
+            />
+            <div *ngIf="authForm.controls['email']?.invalid" class="validation-message">
+              Email is required and its not valid!
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              name="password"
+              ngModel
+              required
+              minlength="6"
+            />
+          </div>
+          <div *ngIf="!isLoginMode" class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control"
+              name="confirmPassword"
+              ngModel
+              required
+              minlength="6"
+             />
+            <div *ngIf="authForm.controls['password'].invalid && authForm.controls['confirmPassword'].touched" class="validation-message">
+              Passwords do not match!
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" [disabled]="!authForm.valid">Register</button>
+        </form>
+      </div>
     </div>
   </div>
-  
+</div>

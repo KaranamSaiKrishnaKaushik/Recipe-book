@@ -1,7 +1,18 @@
-/* Right Side Background */
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.main-wrapper {
+  display: flex;
+  width: 100%;
+  height: calc(105vh - 150px); 
+  overflow: hidden;
+}
+
 .right-side {
-  width: 75%; /* Adjust based on your layout */
-  height: 180%; /*100vh;*/
+  /* height: calc(105vh - 150px); */
   background-image: url('https://source.unsplash.com/1600x900/?pizza,restaurant');
   background-size: cover;
   background-position: center;
@@ -12,9 +23,9 @@
   text-align: center;
   color: white;
   font-family: 'Poppins', sans-serif;
+  /* padding-top: 4vh; */
 }
 
-/* Overlay Effect for Better Readability */
 .right-side::before {
   content: "";
   position: absolute;
@@ -22,12 +33,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background-image: url('https://wilmax.com/cdn/shop/articles/64562323.webp?v=1730181048');
 }
 
-/* Content on Right Side */
 .content {
-  height: 400px;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
   position: relative;
   z-index: 2;
   text-align: center;
@@ -35,6 +47,8 @@
 }
 
 .content h1 {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
   font-size: 3rem;
   margin-bottom: 15px;
   text-transform: uppercase;
@@ -44,23 +58,4 @@
   font-size: 1.4rem;
   margin-bottom: 20px;
   max-width: 600px;
-}
-
-/* Order Now Button */
-.order-btn {
-  background: #ffcc00;
-  color: #333;
-  font-size: 1.4rem;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.order-btn:hover {
-  background: #ff9900;
-  transform: scale(1.1);
 }

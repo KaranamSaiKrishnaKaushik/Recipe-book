@@ -1,6 +1,52 @@
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success" (click)="onNewRecipe()">New Recipe</button>
+    <div class="col-xs-12 d-flex gap-2">
+      <button class="btn btn-success" (click)="onNewRecipe()">New Recipe</button> &nbsp;
+      <button class="btn btn-primary" (click)="showImportModal = true">Load All Recipes</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showImportModal" class="modal-backdrop">
+  <div class="modal-window">
+    <h4>Import Recipes JSON</h4>
+    <div
+      class="drop-zone"
+      (drop)="onFileDrop($event)"
+      (dragover)="onDragOver($event)"
+    >
+      <p>Drag & drop your JSON file here</p>
+      <div *ngIf="jsonError" class="alert alert-danger">
+        {{ jsonError }}
+      </div>
+      <div *ngIf="parsedRecipes && parsedRecipes.length > 0">
+        <h4>Preview of Uploaded Recipes:</h4>
+        <ul>
+          <li *ngFor="let recipe of parsedRecipes">
+            <strong>{{ recipe.name }}</strong> - {{ recipe.category }}<br>
+            <em>{{ recipe.description }}</em>
+            <ul>
+              <li *ngFor="let ing of recipe.ingredients">
+                {{ ing.amount }} x {{ ing.baseName.name }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="fileContent" class="mb-3">
+        <label for="jsonContent">Edit JSON Content</label>
+        <textarea
+          id="jsonContent"
+          class="form-control"
+          rows="10"
+          [(ngModel)]="fileContent"
+        ></textarea>
+      </div>
+    </div>
+    <br>
+    <button class="btn btn-success mt-2" (click)="onImportRecipes()">Import Recipes</button> &nbsp;
+    <button class="btn btn-secondary mt-2" (click)="showImportModal = false">Cancel</button>
+    <p class="text-danger mt-2" *ngIf="importError">{{ importError }}</p>
   </div>
 </div>
 <br>
@@ -12,4 +58,7 @@
     [index]="i"
     ></app-recipe-item>
   </div>
+</div>
+<div *ngIf="isLoading" style="text-align: center" class="loading-spinner-window">
+  <app-loading-spinner></app-loading-spinner>
 </div>

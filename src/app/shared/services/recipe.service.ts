@@ -42,9 +42,40 @@ export class RecipeService{
       });
   }
 
+  addAllRecipes(recipes: Recipe[]){
+   return this.httpClient
+      .post(this.url + 'add-all-recipes', recipes)
+      .pipe(
+        tap(()=>{
+          this.fetchRecipesFromDataSource()
+        })
+      )
+      // .subscribe(response=>{
+      //   console.log(response);
+      // });
+  }
+
   updateRecipe(recipe: Recipe){
     this.httpClient
       .post(this.url + 'update-recipe', recipe)
+      .pipe(
+        tap(()=>{
+          this.fetchRecipesFromDataSource()
+        })
+      )
+      .subscribe(response=>{
+        console.log(response);
+      });
+  }
+
+  // addAllRecipe(recipes: Recipe[]) {
+  //   return this.httpClient.post(`${this.url}add-multiple-recipes`, recipes);
+  // }
+
+  deleteRecipe(recipeId: string){
+    const currentIndex = this.recipes.findIndex(r => r.id === recipeId);
+    this.httpClient
+      .delete(`${this.url}delete-recipe/${recipeId}`)
       .pipe(
         tap(()=>{
           this.fetchRecipesFromDataSource()

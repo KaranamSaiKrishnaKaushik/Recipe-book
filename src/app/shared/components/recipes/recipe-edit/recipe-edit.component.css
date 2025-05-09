@@ -14,3 +14,18 @@
     background-color: #f1f1f1;
   }
   
+/* input.ng-invalid,
+textarea.ng-invalid{
+  border: 1px solid red;
+} */
+
+.is-invalid {
+  border: 1px solid red !important;
+}
+
+.validation-message {
+  font-size: 0.90rem;
+  color: #6c757d; /* Bootstrap's gray text */
+  margin-left: 4px;
+  margin-top: 4px;
+}
