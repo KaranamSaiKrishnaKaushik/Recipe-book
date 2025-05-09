@@ -1,0 +1,178 @@
+.auth-container {
+    display: flex;
+    height: 90vh;
+    font-family: 'Georgia', serif;
+  }
+  
+  .auth-image-side {
+    flex: 1;
+    background-image: url('https://cdn.apartmenttherapy.info/image/upload/f_auto,q_auto:eco,c_fill,g_center,w_730,h_913/k%2FPhoto%2FRecipes%2F2019-06-Cheesy-Skillet-Chicken-Parm-Meatballs%2FCheesy-Skillet-Chicken-Parm-Meatballs_012'); /* Replace with your uploaded image */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .auth-content-side {
+    flex: 1;
+    padding: 2rem 4rem;
+    background-color: #faf8f4;
+    display: flex;
+    align-items: center;
+    overflow-y: auto;
+  }
+  
+  .auth-box {
+    max-width: 600px;
+    margin: auto;
+    width: 100%;
+  }
+  
+  h1 {
+
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  .has-text-align-center {
+    font-family: "Playfair Display", serif;
+    font-optical-sizing: auto;
+    text-align: center;
+  }
+  
+  .lead {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  
+  hr {
+    margin: 1.5rem 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+  }
+  
+  .info-links a {
+    color: #5a4228;
+    text-decoration: underline;
+    margin: 0 0.3rem;
+  }
+  
+  .description {
+    margin-bottom: 1.5rem;
+    /* color: #444; */
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  form {
+    /* display: flex;
+    flex-direction: column; */
+    background-color: #fff;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+  
+  .form-row {
+    display: flex;
+    /* gap: 1rem; */
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 1rem; */
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  
+  label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+  }
+  
+  input {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  input.form-control {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: border 0.3s ease;
+  }
+
+  input.form-control:focus {
+    border-color: #e76f51;
+    outline: none;
+  }
+  
+  .captcha-placeholder {
+    background-color: #e0e0e0;
+    padding: 1rem;
+    text-align: center;
+    border: 1px dashed #aaa;
+    border-radius: 4px;
+    color: #555;
+    font-style: italic;
+  }
+  
+  .btn-submit {
+    display: block;
+    margin: 1rem auto;
+    margin-top: 1rem;
+    padding: 0.7rem 1.5rem;
+    background-color: #5a4228;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    /* background-color: #4a4a2f;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease; */
+  }
+  
+  .btn-submit:hover {
+    background-color: #3d2c1a;
+  }
+
+  .invalid-feedback {
+    font-size: 13px;
+    color: #c0392b;
+    margin-top: 5px;
+  }
+  
+  .is-invalid {
+    border: 1px solid red !important;
+  }
+  
+  .validation-message {
+    font-size: 0.90rem;
+    color: #6c757d;
+    margin-left: 4px;
+    margin-top: 4px;
+  }

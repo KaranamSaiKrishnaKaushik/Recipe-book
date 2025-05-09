@@ -15,7 +15,11 @@
             id="name"
             class="form-control"
             formControlName="name"
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('name')?.invalid }"
           >
+          <div *ngIf="submitted && recipeForm.get('name')?.invalid" class="validation-message">
+            Name is required
+          </div>
         </div>
       </div>
       <div class="row">
@@ -32,6 +36,7 @@
             (blur)="closeDropdownWithDelay()"
             autocomplete="off"
             required
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('category')?.invalid }"
           >
           <ul
              *ngIf="dropdownOpen && filteredOptions.length"
@@ -46,6 +51,9 @@
                {{ option.baseName.name }}
               </li>
           </ul>
+          <div *ngIf="submitted && recipeForm.get('category')?.invalid" class="validation-message">
+            Category is required
+          </div>
         </div>
       </div>
       <div class="row">
@@ -57,7 +65,11 @@
             class="form-control"
             formControlName="imagePath"
             #imagePath
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('imagePath')?.invalid }"
           >
+          <div *ngIf="submitted && recipeForm.get('imagePath')?.invalid" class="validation-message">
+            ImagePath is required
+          </div>
         </div>
       </div>
       <div class="row">
@@ -75,7 +87,11 @@
           rows="7"
           class="form-control"
           formControlName="description"
+          [ngClass]="{ 'is-invalid': submitted && recipeForm.get('description')?.invalid }"
           ></textarea>
+          <div *ngIf="submitted && recipeForm.get('description')?.invalid" class="validation-message">
+            Description is required
+          </div>
         </div>
       </div>
       <div class="row">
@@ -120,7 +136,11 @@
             rows="7"
             class="form-control"
             formControlName="instructions"
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('instructions')?.invalid }"
           ></textarea>
+          <div *ngIf="submitted && recipeForm.get('instructions')?.invalid" class="validation-message">
+            Instructions are required
+          </div>
         </div>
       </div>
     </form>

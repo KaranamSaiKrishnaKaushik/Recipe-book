@@ -14,6 +14,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
+import { UserSettings } from '../../models/user-settings.model';
+import { SettingsService } from '../../services/settings.service';
 
  export interface AuthResponseData {
    idToken: string;
@@ -31,7 +33,7 @@ export class AuthService {
   user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
   currentUser: any;
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private settingService: SettingsService) {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       this.currentUser = user;
@@ -47,7 +49,7 @@ export class AuthService {
     return localStorage.getItem('authToken');
   }
 
-  signUp(email: string, password: string) {
+  signUp(email: string, password: string, userSettings: UserSettings) {
     const auth = getAuth();
     return from(createUserWithEmailAndPassword(auth, email, password)).pipe(
       catchError(this.handleError),
@@ -55,6 +57,7 @@ export class AuthService {
         const user = userCredential.user;
         user.getIdToken().then((token) => {
           this.handleAuthentication(user.email!, user.uid, token, 3600);
+          this.settingService.addUser(userSettings);
         });
       })
     );

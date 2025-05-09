@@ -15,8 +15,8 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li style="cursor: pointer;"><a><i class="fa-regular fa-heart fa-lg"></i></a></li>
-        <li style="cursor: pointer;"><a><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
+        <li routerLinkActive="active" *ngIf=isAuthenticated style="cursor: pointer;"><a><i class="fa-regular fa-heart fa-lg"></i></a></li>
+        <li routerLinkActive="active" *ngIf=isAuthenticated style="cursor: pointer;"><a><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
         <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/settings']"><i
               class="fas fa-cog fa-lg"></i></a></li>
         <li *ngIf=isAuthenticated><a style="cursor: pointer;" (click)="onLogout()">Logout</a></li>

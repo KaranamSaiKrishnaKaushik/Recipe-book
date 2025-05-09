@@ -55,5 +55,48 @@ export class RecipeDetailComponent implements OnInit {
     this.router.navigate(['edit'], { relativeTo: this.route });
   }
 
-  onDeleteRecipe() {}
+
+  onDeleteRecipe() {
+    const currentId = this.recipe?.id;
+    if (!currentId) return;
+    // this.recipeService.deleteRecipe(currentId);
+    // const subscription = this.recipeService.recipesChanged.subscribe((updatedRecipes) => {
+    //   subscription.unsubscribe(); 
+
+    //   if (updatedRecipes.length === 0) {
+    //     this.router.navigate(['/recipes']);
+    //   }
+    //   const index = updatedRecipes.findIndex(
+    //     r => 
+    //       r.id === currentId
+    //   );
+  
+    //   if (updatedRecipes.length === 0) {
+    //     this.router.navigate(['/recipes']);
+    //   } else if (index > 0) {
+    //     this.router.navigate(['/recipes', this.id-1]);
+    //   } else {
+    //     this.router.navigate(['/recipes', 0]);
+    //   }
+    // });
+
+      // Capture the index *before* deletion
+
+  const sub = this.recipeService.recipesChanged.subscribe((updatedRecipes) => {
+    sub.unsubscribe();
+
+    if (updatedRecipes.length === 0) {
+      this.router.navigate(['/recipes']);
+    } else {
+      // Prefer previous recipe if available, else fallback to first recipe
+      const targetIndex = this.id > 0 ? this.id - 1 : 0;
+      //const nextRecipe = updatedRecipes[targetIndex];
+
+      this.router.navigate(['/recipes', targetIndex]);
+    }
+  });
+
+  this.recipeService.deleteRecipe(currentId);
+  }
+  
 }
