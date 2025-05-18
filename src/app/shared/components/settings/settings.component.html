@@ -19,6 +19,16 @@
     <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
       <h4>Basics:</h4>
       <div class="form-group">
+        <label>Salutation</label>
+<!-- 
+        <input type="text" formControlName="salutation" /> -->
+        <select formControlName="salutation">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Neutral">Neutral</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label>First Name</label>
         <input type="text" formControlName="userFirstName" />
       </div>
@@ -49,6 +59,10 @@
         </select>
       </div>
   
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="url" formControlName="phoneNumber" placeholder="+49 17634763491" />
+      </div>
       <h4>Links:</h4>
       <div class="form-group">
         <label>Website</label>

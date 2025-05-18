@@ -1,5 +1,6 @@
 export class UserSettings{
     constructor(
+            public salutation?: string,
             public userFirstName?: string,
             public userLastName?: string,
             public headline?: string,

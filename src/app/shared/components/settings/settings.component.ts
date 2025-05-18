@@ -69,11 +69,13 @@ export class SettingsComponent implements OnInit {
     let state = '';
     let zipCode = '';
     let country = '';
+    let salutation='';
     let firstName = '';
     let lastName = '';
     let headline = '';
     let biography = '';
     let language = '';
+    let phoneNumber = '';
     let website = '';
     let facebookUserName = '';
     let instagramUserName = '';
@@ -89,11 +91,13 @@ export class SettingsComponent implements OnInit {
       state = this.userSettings.state ?? '';
       zipCode = this.userSettings.zipCode ?? '';
       country = this.userSettings.country ?? '';
+      salutation = this.userSettings.salutation ?? '';
       firstName = this.userSettings.userFirstName ?? '';
       lastName = this.userSettings.userLastName ?? '';
       headline = this.userSettings.headline ?? '';
       biography = this.userSettings.biography ?? '';
       language = this.userSettings.language ?? '';
+      phoneNumber = this.userSettings.phoneNumber?? '';
       website = this.userSettings.website ?? '';
       facebookUserName = this.userSettings.facebookUserName ?? '';
       instagramUserName = this.userSettings.instagramUserName ?? '';
@@ -131,11 +135,13 @@ export class SettingsComponent implements OnInit {
     });
 
     this.profileForm = this.fb.group({
+      salutation: [salutation, Validators.required],  
       userFirstName: [firstName, Validators.required],
       userLastName: [lastName, Validators.required],
       headline: [headline, [Validators.maxLength(60)]],
       biography: [biography, [Validators.maxLength(1000)]],
       language: ['en', Validators.required],
+      phoneNumber : [phoneNumber],
       website: [website],
       facebookUserName: [facebookUserName],
       instagramUserName: [instagramUserName],

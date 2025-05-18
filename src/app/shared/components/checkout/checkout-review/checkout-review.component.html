@@ -1,0 +1,38 @@
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+    <app-checkout-progress [currentStep]="3"></app-checkout-progress>
+
+    <h2 class="section-title">Order overview</h2>
+
+    <div class="review-box">
+      <h3>Billing address</h3>
+      <p> {{ address.firstName }} {{ address.lastName }}</p> 
+      <!-- {{ address.salutation }} -->
+      <p>{{ address.street }} {{ address.houseNumber }}</p>
+      <p>{{ address.postCode }} {{ address.state }}</p>
+      <p>{{ address.country }}</p>
+      <p>Telefon: {{ address.phone }}</p>
+    </div>
+
+    <div class="review-box">
+      <h3>Payment method</h3>
+      <p>{{ paymentMethod }}</p>
+    </div>
+
+    <div class="button-group">
+      <button (click)="backToPayment()">Back</button>
+      <!-- <button (click)="placeOrder()" >Proceed</button>  -->
+    </div>
+  </div>
+
+  <div class="checkout-right">
+    <div class="cart-summary">
+      <p>Products price: {{ productPrice | number:'1.2-2' }} €</p>
+      <p>Pfand: {{ pfand | number:'1.2-2' }} €</p>
+      <p><strong>Total sum: {{ totalPrice | number: '1.2-2' }} €</strong></p>
+    </div>
+    <div class="col-xs-7">
+    <div id="paypal-button-container" style="margin-top: 20px;"></div>
+  </div>
+  </div>
+</div>

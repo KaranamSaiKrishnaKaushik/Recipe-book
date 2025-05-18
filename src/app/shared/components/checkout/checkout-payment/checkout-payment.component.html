@@ -1,0 +1,28 @@
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+    <app-checkout-progress [currentStep]="2"></app-checkout-progress>
+
+    <h2 class="section-title">Choose payment method</h2>
+    <div class="payment-options">
+      <button 
+        *ngFor="let option of paymentOptions"
+        [class.selected]="selectedPayment === option"
+        (click)="selectPayment(option)">
+        {{ option }}
+      </button>
+    </div>
+
+    <div class="button-group">
+      <button (click)="backToAddress()">Back</button>
+      <button (click)="proceed()" [disabled]="!selectedPayment">Proceed</button> 
+    </div>
+  </div>
+
+  <div class="checkout-right">
+    <div class="cart-summary">
+      <p>Products price: {{ productPrice | number:'1.2-2' }} €</p>
+      <p>Pfand: {{ pfand | number:'1.2-2' }} €</p>
+      <p><strong>Total sum: {{ totalPrice | number:'1.2-2' }} €</strong></p>
+    </div>
+  </div>
+</div>

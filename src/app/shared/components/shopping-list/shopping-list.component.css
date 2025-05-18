@@ -35,3 +35,14 @@
 .filter-row input {
   width: 100%;
 }
+
+/* shopping-list.component.css */
+.chart-wrapper {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.chart-wrapper h4 {
+  margin-bottom: 0.5rem;
+}

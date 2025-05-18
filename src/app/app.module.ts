@@ -41,6 +41,13 @@ import { AuthGuard } from './shared/components/auth/auth.guard';
 import { AlertBoxComponent } from './shared/components/alert-box/alert-box.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { SettingsService } from './shared/services/settings.service';
+import { ShoppingCartComponent } from './shared/components/shopping-cart/shopping-cart.component';
+import { CheckoutAddressComponent } from './shared/components/checkout/checkout-address/checkout-address.component';
+import { CheckoutPaymentComponent } from './shared/components/checkout/checkout-payment/checkout-payment.component';
+import { CheckoutReviewComponent } from './shared/components/checkout/checkout-review/checkout-review.component';
+import { CheckoutProgressComponent } from './shared/components/checkout/checkout-progress/checkout-progress.component';
+import { PaymentSuccessComponent } from './shared/components/checkout/payment-success/payment-success.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -62,7 +69,13 @@ import { SettingsService } from './shared/services/settings.service';
     AuthComponent,
     LoadingSpinnerComponent,
     AlertBoxComponent,
-    SettingsComponent
+    SettingsComponent,
+    ShoppingCartComponent,
+    CheckoutAddressComponent,
+    CheckoutPaymentComponent,
+    CheckoutReviewComponent,
+    CheckoutProgressComponent,
+    PaymentSuccessComponent
   ],
   imports: [
     FormsModule,
@@ -80,7 +93,8 @@ import { SettingsService } from './shared/services/settings.service';
     CdkTableModule,
     MatCardModule,
     DragDropModule,
-    MatIconModule
+    MatIconModule,
+    NgChartsModule
   ],
   providers: [
     RecipeService, 

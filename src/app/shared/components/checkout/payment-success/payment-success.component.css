@@ -1,0 +1,88 @@
+.confirmation-container {
+  max-width: 480px;
+  margin: 60px auto;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border-radius: 12px;
+}
+
+.icon-wrapper {
+  background-color: #256029;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon {
+  color: #fff;
+  font-size: 28px;
+}
+
+h2 {
+  margin-bottom: 8px;
+}
+
+.order-number {
+  color: #444;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.order-badge {
+  background-color: #f2f2f2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+.transaction-details {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.view-invoice-btn {
+  background-color: #256029;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.view-invoice-btn:hover {
+  background-color: #1d4f22;
+}
+
+.footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #666;
+}
+
+.footer a {
+  color: #256029;
+  text-decoration: none;
+}
