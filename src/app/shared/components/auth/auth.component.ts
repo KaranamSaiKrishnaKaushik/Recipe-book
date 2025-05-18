@@ -94,7 +94,7 @@ export class AuthComponent implements OnInit{
     setTimeout(() => {
       if (this.aForm) {
         this.aForm.setValue({
-          email: 'test2@test.com',
+          email: 'test@test.com',
           password: 'Boston100$'
         });
       }

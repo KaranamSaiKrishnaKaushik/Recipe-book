@@ -1,158 +1,105 @@
 <div class="container">
-  <div class="row">
-<!--    <div class="col-xs-4">
-      <ul class="list-group">
-        <a class="list-group-item"
-           *ngFor="let product of products; let i = index"
-        >
-          {{i+1}} . {{product.name}}  |  {{product.price}}
-        </a>
-      </ul>-->
-    <div class="col-xs-12"  *ngIf="productsFound.length==0">
-      <div class="product-grid">
-        <div class="product-card" *ngFor="let product of products">
-          <!--<div class="discount-badge">{{ product.name }}% OFF</div>-->
-          <img [src]="product.imageLink" alt="{{ product.name }}" />
-          <div class="brand">Rewe</div>
-          <h4 class="product-name">{{ product.name }}</h4>
 
-          <!--
-                <select [(ngModel)]="product.selectedQuantity">
-                  <option *ngFor="let option of product.quantityOptions">{{ option }}</option>
-                </select>
-          -->
-
-          <div class="price">
-            <span class="discounted-price">{{ product.price }}</span>
-            <span class="original-price">{{ product.price }}</span>
-          </div>
-
-          <div class="card-footer">
-            <a (click)="addToWishlist(product)" style="cursor: pointer">
-              <span class="glyphicon glyphicon-bookmark"></span>
-            </a>
-            <button class="btn btn-primary" (click)="addToCart(product)">Add</button>
-          </div>
-        </div>
-      </div>
+  <div class="toggle-toolbar">
+    <div class="switch-container">
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="showShoppingList" (change)="onShoppingListToggle($event)">
+        <span class="slider round"></span>
+      </label>
+      <span class="switch-text">Shopping List</span>
     </div>
-    <div class="col-xs-12" *ngIf="productsFound.length!=0">
-<!--      <ul class="list-group" *ngIf="productsFound.length!=0">
-        <a class="list-group-item"
-           *ngFor="let product of productsFound; let i = index"
-        >
-          {{i+1}} . {{product.name}}  |  {{product.price}}
-        </a>
-      </ul>-->
-      <div class="product-grid">
-        <div class="product-card" *ngFor="let product of productsFound">
-          <!--<div class="discount-badge">{{ product.name }}% OFF</div>-->
-          <img [src]="product.imageLink" alt="{{ product.name }}" />
-          <div class="brand">Rewe</div>
-          <h4 class="product-name">{{ product.name }}</h4>
 
-          <!--
-                <select [(ngModel)]="product.selectedQuantity">
-                  <option *ngFor="let option of product.quantityOptions">{{ option }}</option>
-                </select>
-
-                <span class="discounted-price">₹{{ product.price }}</span>
-          -->
-
-          <div class="price">
-            <span class="discounted-price">{{ product.price }}</span>
-            <span class="original-price">{{ product.price }}</span>
-          </div>
-
-          <div class="card-footer">
-            <a (click)="addToWishlist(product)" style="cursor: pointer">
-              <span class="glyphicon glyphicon-bookmark"></span>
-            </a>
-            <button class="btn btn-primary" (click)="addToCart(product)">Add</button>
-          </div>
-        </div>
-      </div>
-      <!--<div class="drag-drop-container">
-        &lt;!&ndash; Left List &ndash;&gt;
-        <div class="list-container">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Source List</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div
-                cdkDropList
-                #leftList="cdkDropList"
-                [cdkDropListData]="leftItems"
-                [cdkDropListConnectedTo]="[rightList]"
-                class="item-list"
-                (cdkDropListDropped)="drop($event)"
-              >
-                <div
-                  *ngFor="let item of leftItems; trackBy: trackById"
-                  class="item-box"
-                  cdkDrag
-                  [cdkDragData]="item"
-                  [class.selected]="isSelected(item, 'left')"
-                  (click)="toggleSelect(item, 'left')"
-                >
-                  {{ item.name }}
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
-        &lt;!&ndash; Action Buttons &ndash;&gt;
-        <div class="action-buttons">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="moveSelectedToRight()"
-            [disabled]="!hasSelectedItems('left')"
-          >
-            <mat-icon>arrow_forward</mat-icon> Move to Right
-          </button>
-          <button
-            mat-raised-button
-            color="accent"
-            (click)="moveSelectedToLeft()"
-            [disabled]="!hasSelectedItems('right')"
-          >
-            <mat-icon>arrow_back</mat-icon> Move to Left
-          </button>
-        </div>
-
-        &lt;!&ndash; Right List &ndash;&gt;
-        <div class="list-container">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Target List</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div
-                cdkDropList
-                #rightList="cdkDropList"
-                [cdkDropListData]="rightItems"
-                [cdkDropListConnectedTo]="[leftList]"
-                class="item-list"
-                (cdkDropListDropped)="drop($event)"
-              >
-                <div
-                  *ngFor="let item of rightItems; trackBy: trackById"
-                  class="item-box"
-                  cdkDrag
-                  [cdkDragData]="item"
-                  [class.selected]="isSelected(item, 'right')"
-                  (click)="toggleSelect(item, 'right')"
-                >
-                  {{ item.name }}
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </div>-->
+    <div class="switch-container">
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="showAllProducts">
+        <span class="slider round"></span>
+      </label>
+      <span class="switch-text">All Products</span>
     </div>
   </div>
+
+  <div *ngIf="showShoppingList && productsFound.length > 0" class="products-section">
+    <h2 class="has-text-align-center">Products from your Shopping List</h2>
+    <!-- <div class="search-bar">
+      <input type="text" placeholder="Search matched products..." [(ngModel)]="searchFound"
+        (input)="onSearchFoundChange()" />
+    </div> -->
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of filteredFound">
+        <img [src]="product.imageLink" alt="{{ product.name }}" />
+        <h6 class="product-name">{{ product.name }}</h6>
+        <div class="price">
+          <span class="discounted-price">{{ product.price | number:'1.2-2' }}€ </span>
+          <span>{{ product.category }}</span>
+        </div>
+
+        <div class="card-footer">
+          <button *ngIf="!product.quantity || product.quantity === 0" class="btn btn-primary"
+            (click)="addToCart(product)"><i class="fa-solid fa-cart-shopping fa-lg"></i></button>
+
+          <div class="quantity-control" *ngIf="product.quantity && product.quantity > 0">
+            <button class="btn btn-light" (click)="decrement(product)">−</button>
+            <span class="quantity">{{ product.quantity }}</span>
+            <button class="btn btn-light" (click)="increment(product)">+</button>
+          </div>
+
+          <div class="brand">
+            <img [src]="getBrandLogoUrl(product.sourceName)" [alt]="product.sourceName + ' logo'" class="brand-logo" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showShoppingList && productsFound.length == 0" class="products-section">
+    <h3 class="has-text-align-center">There are no available items in the market from your current Shopping List. Sorry!
+    </h3>
+  </div>
+  <br>
+  <div *ngIf="showAllProducts" class="products-section mt-5">
+    <h2 class="has-text-align-center">All Products</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="Search all products..." [(ngModel)]="searchAll" (input)="filterAll()" />
+    </div>
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of pagedProducts">
+        <img [src]="product.imageLink" alt="{{ product.name }}" />
+        <!-- <div class="brand">{{product.sourceName}}</div> -->
+        <h6 class="product-name">{{ product.name }}</h6>
+        <div class="price">
+          <span class="discounted-price">{{ product.price | number:'1.2-2' }}€ </span>
+          <span>{{ product.category }}</span>
+        </div>
+
+        <div class="card-footer">
+          <button *ngIf="!product.quantity || product.quantity === 0" class="btn btn-primary"
+            (click)="addToCart(product)"><i class="fa-solid fa-cart-shopping fa-lg"></i></button>
+
+          <div class="quantity-control" *ngIf="product.quantity && product.quantity > 0">
+            <button class="btn btn-light" (click)="decrement(product)">−</button>
+            <span class="quantity">{{ product.quantity }}</span>
+            <button class="btn btn-light" (click)="increment(product)">+</button>
+          </div>
+
+          <div class="brand">
+            <img [src]="getBrandLogoUrl(product.sourceName)" [alt]="product.sourceName + ' logo'" class="brand-logo" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+      <button [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">‹</button>
+
+      <button *ngFor="let page of totalPagesArray" [class.active-page]="currentPage === page"
+        (click)="changePage(page)">
+        {{ page }}
+      </button>
+
+      <button [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">›</button>
+    </div>
+
+  </div>
+
 </div>

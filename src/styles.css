@@ -2,3 +2,20 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+
+  --color-primary: #d00;
+  --color-primary-hover: rgb(224, 150, 150);
+  --color-primary-dark: #b71c1c;
+  --color-disabled: #aaa;
+  --color-light-gray: #f8f8f8;
+  --color-border: #ccc;
+  --color-background-primary: white;
+
+  --button-radius: 4px;
+  --button-padding: 0.75rem 1.5rem;
+}

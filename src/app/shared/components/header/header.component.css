@@ -1,0 +1,12 @@
+nav.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Keep it above other content */
+  border-bottom: 1px solid #ddd;
+}
+
+.container {
+  margin-top: 10px; /* adjust based on your header height */
+}

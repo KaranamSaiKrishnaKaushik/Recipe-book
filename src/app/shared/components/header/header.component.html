@@ -11,12 +11,11 @@
         <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/recipes']">Recipes</a></li>
         <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/shopping-list']">Shopping List</a></li>
         <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/product-list']">Product List</a></li>
-        <!--<li><a [routerLink]="['/drag-drop-list']">Drag Drop List</a></li>-->
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
         <li routerLinkActive="active" *ngIf=isAuthenticated style="cursor: pointer;"><a><i class="fa-regular fa-heart fa-lg"></i></a></li>
-        <li routerLinkActive="active" *ngIf=isAuthenticated style="cursor: pointer;"><a><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
+        <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/cart']"><i class="fa-solid fa-cart-shopping fa-lg"></i></a></li>
         <li routerLinkActive="active" *ngIf=isAuthenticated><a [routerLink]="['/settings']"><i
               class="fas fa-cog fa-lg"></i></a></li>
         <li *ngIf=isAuthenticated><a style="cursor: pointer;" (click)="onLogout()">Logout</a></li>

@@ -1,0 +1,42 @@
+<div class="checkout-wrapper">
+  <div class="checkout-left">
+    <app-checkout-progress [currentStep]="1"></app-checkout-progress>
+
+    <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="address-form">
+      <div class="salutation-buttons">
+        <!-- <button type="button" (click)="addressForm.get('salutation')?.setValue('Mrs')">Mrs</button>
+        <button type="button" (click)="addressForm.get('salutation')?.setValue('Mr')">Mr</button>
+        <button type="button" (click)="addressForm.get('salutation')?.setValue('Neutral')">Neutral</button> -->
+          <button *ngFor="let option of genderOptions" type="button"
+            [ngClass]="{'selected': addressForm.get('salutation')?.value === option}"
+            (click)="addressForm.get('salutation')?.setValue(option)">
+            {{ option }}
+          </button>
+      </div>
+
+      <input formControlName="firstName" placeholder="Vorname *" />
+      <input formControlName="lastName" placeholder="Nachname *" />
+      <select formControlName="country">
+        <option value="Deutschland">Deutschland</option>
+      </select>
+      <input formControlName="street" placeholder="Straße *" />
+      <input formControlName="houseNumber" placeholder="Hausnr. *" />
+      <input formControlName="postCode" placeholder="PLZ *" />
+      <input formControlName="state" placeholder="Stadt *" />
+      <input formControlName="phone" placeholder="Telefonnummer *" />
+
+      <div class="button-group">
+        <button type="button" (click)="cancel()">Cancel</button>
+        <button type="submit">Save and Next</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="checkout-right">
+    <div class="cart-summary">
+      <p>Products price: {{ productPrice | number:'1.2-2' }} €</p>
+      <p>Pfand: {{ pfand | number:'1.2-2' }} €</p>
+      <p><strong>Total sum: {{ totalPrice | number:'1.2-2' }} €</strong></p>
+    </div>
+  </div>
+</div>

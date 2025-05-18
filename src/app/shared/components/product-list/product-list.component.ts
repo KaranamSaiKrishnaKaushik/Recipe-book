@@ -1,237 +1,176 @@
 import { Component, OnInit } from '@angular/core';
-import {ProductListService} from "./product-list.service";
-import {Product} from "./product.model";
-import {Subscription} from "rxjs";
-import {Item} from "../../Enums/Item";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import { ProductListService } from './product-list.service';
+import { Product } from './product.model';
+import { Subject, Subscription } from 'rxjs';
+import { Item } from '../../Enums/Item';
+import { CartService } from '../../services/cart.service';
+import { ProductSearch } from './product-search.model';
+import { ShoppingListService } from '../../services/shopping-list.service';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent implements OnInit {
+  constructor(
+    private plService: ProductListService,
+    private cartService: CartService,
+    private shoppingListService: ShoppingListService
+  ) {}
 
-  constructor(private plService: ProductListService) { }
-  products: Product[]=[];
-  productsFound: Product[]=[];
+  showShoppingList: boolean = false;
+  showAllProducts: boolean = true;
+  productsFound: Product[] = [];
+  productsFoundChanged = new Subject<Product[]>();
+  searchFound: string = '';
+  searchAll: string = '';
 
-  prodSubscription: Subscription;
+  pageSize: number = 20;
+  currentPage: number = 1;
+  pagedProducts: Product[] = [];
+  totalPages: number = 1;
+  filteredFound: Product[] = [];
   prodFoundSubscription: Subscription;
+
   ngOnInit(): void {
-    this.products = this.plService.getProducts();
-    this.prodSubscription = this.plService.productsChanged
-      .subscribe(
-      (products: Product[])=>{
-        this.products = products;
+    this.loadProducts(); // Load first page on init
+
+    this.prodFoundSubscription = this.plService.productsFoundChanged.subscribe(
+      (productsFound: Product[]) => {
+        this.productsFound = productsFound;
+        this.showShoppingList = this.plService.showShoppingListItems;
+        this.filterFound();
       }
     );
-
-    this.prodFoundSubscription = this.plService.productsFoundChanged
-      .subscribe(
-        (productsFound: Product[])=>{
-          this.productsFound = productsFound;
-/*          this.leftItems = productsFound.map((product, index) => ({
-            id: index+1,
-            name: product.name,
-          }));*/
-        }
-      );
   }
 
-  addToCart(product: any) {
-    console.log('Add to cart:', product);
-    // Add your cart service logic here
+  loadProducts() {
+    this.plService
+      .getPagedProducts(this.currentPage, this.pageSize)
+      .subscribe((response) => {
+        this.pagedProducts = response.items;
+        this.totalPages = Math.ceil(response.totalCount / this.pageSize);
+      });
   }
 
-  addToWishlist(product: any) {
-    console.log('Add to wishlist:', product);
-    // Add wishlist logic here
+  addToCart(product: Product) {
+    product.quantity = 1;
+    this.updateCart(product);
   }
 
+  increment(product: Product) {
+    product.quantity++;
+    this.updateCart(product);
+  }
 
-/*
-  leftItems: Item[] = []
-  rightItems: Item[] = []
-
-  selectedLeftItems: Item[] = []
-  selectedRightItems: Item[] = []
-
-  /!**
-   * Toggle selection state of an item
-   *!/
-  toggleSelect(item: Item, list: 'left' | 'right'): void {
-    if (list === 'left') {
-      const index = this.selectedLeftItems.findIndex(i => i.id === item.id);
-      if (index === -1) {
-        this.selectedLeftItems.push(item); // Select the item
-      } else {
-        this.selectedLeftItems.splice(index, 1); // Deselect the item
-      }
+  decrement(product: Product) {
+    if (product.quantity > 1) {
+      product.quantity--;
     } else {
-      // Same logic for right list
-      const index = this.selectedRightItems.findIndex(i => i.id === item.id);
-      if (index === -1) {
-        this.selectedRightItems.push(item);
-      } else {
-        this.selectedRightItems.splice(index, 1);
-      }
+      product.quantity = 0;
     }
+    this.updateCart(product);
   }
 
-  /!**
-   * Check if an item is selected
-   *!/
-  isSelected(item: Item, list: 'left' | 'right'): boolean {
-    if (list === 'left') {
-      return this.selectedLeftItems.some(i => i.id === item.id);
-    } else {
-      return this.selectedRightItems.some(i => i.id === item.id);
-    }
+  updateCart(product: Product) {
+    this.cartService.addToCart(product);
   }
 
-  /!**
-   * Check if there are any selected items in a list
-   *!/
-  hasSelectedItems(list: 'left' | 'right'): boolean {
-    return list === 'left'
-      ? this.selectedLeftItems.length > 0
-      : this.selectedRightItems.length > 0;
-  }
+  onSearchFoundChange() {
+    const searchTerm = this.searchFound.trim().toLowerCase();
 
-  /!**
-   * Tracking function for ngFor performance
-   *!/
-  trackById(index: number, item: Item): number {
-    return item.id;
-  }
-
-  /!**
-   * Handle drop events between lists
-   *!/
-  drop(event: CdkDragDrop<Item[]>) {
-    if (event.previousContainer === event.container) {
-      // Reordering within the same list
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      // Moving between lists
-      if (this.isSingleItemDrag(event)) {
-        // Single item transfer
-        transferArrayItem(
-          event.previousContainer.data,
-          event.container.data,
-          event.previousIndex,
-          event.currentIndex
-        );
-      } else {
-        // Multi-item transfer - our custom logic
-        this.handleMultiItemDrag(event);
-      }
-    }
-
-    // Clear selections after completing the operation
-    this.clearSelections();
-  }
-
-  /!**
-   * Check if this is a single item drag operation
-   *!/
-  private isSingleItemDrag(event: CdkDragDrop<Item[]>): boolean {
-    const sourceList = event.previousContainer.id === 'cdk-drop-list-0' ? 'left' : 'right';
-    const draggedItem = event.item.data;
-
-    // Check if the dragged item is part of a multi-selection
-    return sourceList === 'left'
-      ? !this.selectedLeftItems.some(item => item.id === draggedItem.id) || this.selectedLeftItems.length === 0
-      : !this.selectedRightItems.some(item => item.id === draggedItem.id) || this.selectedRightItems.length === 0;
-  }
-
-
-  /!**
-   * Custom logic to handle dragging multiple selected items
-   *!/
-  private handleMultiItemDrag(event: CdkDragDrop<Item[]>) {
-    const sourceList = event.previousContainer.id === 'cdk-drop-list-0' ? 'left' : 'right';
-    const draggedItem = event.item.data;
-    const selectedItems = sourceList === 'left' ? this.selectedLeftItems : this.selectedRightItems;
-
-    // Fall back to single item drag if the dragged item isn't in selection
-    if (!selectedItems.some(item => item.id === draggedItem.id)) {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+    if (!searchTerm) {
+      // If search box is empty, maybe reload the original matched products or clear
+      this.productsFound = []; // or reload initial matched products
+      this.productsFoundChanged.next(this.productsFound.slice());
+      this.filteredFound = [];
       return;
     }
 
-    // Find indices of all selected items
-    const selectedIndices = selectedItems.map(item =>
-      event.previousContainer.data.findIndex(listItem => listItem.id === item.id)
-    ).filter(index => index !== -1).sort((a, b) => a - b);
+    // Build search model dynamically based on search term
+    const matchedSearch: ProductSearch = {
+      source: 'all-stores',
+      names: [searchTerm],
+    };
 
-    // Move all selected items while adjusting for removed items
-    for (let i = 0; i < selectedIndices.length; i++) {
-      // Adjust index based on already removed items
-      const adjustedIndex = selectedIndices[i] - i;
-      const item = event.previousContainer.data[adjustedIndex];
+    this.plService.searchAndUpdateMatchedProducts(matchedSearch);
+  }
 
-      // Remove from source
-      event.previousContainer.data.splice(adjustedIndex, 1);
+  filterFound() {
+    this.filteredFound = this.productsFound.filter((p) =>
+      p.name.toLowerCase().includes(this.searchFound.toLowerCase())
+    );
+  }
 
-      // Add to target at appropriate position
-      const targetIndex = event.currentIndex > event.previousIndex
-        ? event.currentIndex - i
-        : event.currentIndex;
-      event.container.data.splice(targetIndex, 0, item);
+  filterAll() {
+    if (!this.searchAll.trim()) {
+      this.loadProducts();
+      return;
+    }
+
+    const searchModel: ProductSearch = {
+      source: 'all-stores',
+      names: [this.searchAll.trim().toLowerCase()],
+    };
+    this.plService.getProductsByName(searchModel).subscribe((products) => {
+      this.pagedProducts = products;
+    });
+  }
+
+  changePage(page: number) {
+    this.currentPage = page;
+    this.loadProducts();
+  }
+
+  get totalPagesArray(): number[] {
+    const range = [];
+    const visiblePages = 5;
+    let start = Math.max(this.currentPage - Math.floor(visiblePages / 2), 1);
+    let end = start + visiblePages - 1;
+
+    if (end > this.totalPages) {
+      end = this.totalPages;
+      start = Math.max(end - visiblePages + 1, 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      range.push(i);
+    }
+    return range;
+  }
+
+  onShoppingListToggle(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    console.log('Shopping list toggle:', isChecked);
+
+    if (isChecked) {
+      let ingredients = this.shoppingListService.getIngredients();
+      const ingredientNames = ingredients.map(
+        (ingredient) => ingredient.baseName.name
+      );
+      console.log('ingredients from product list component :', ingredients);
+      const matchedSearch: ProductSearch = {
+        source: 'all-stores',
+        names: ingredientNames,
+      };
+
+      this.plService.searchAndUpdateMatchedProducts(matchedSearch);
     }
   }
 
-  /!**
-   * Move selected items from left to right
-   *!/
-  moveSelectedToRight(): void {
-    if (this.selectedLeftItems.length === 0) return;
-
-    // Add selected items to right list
-    this.rightItems = [...this.rightItems, ...this.selectedLeftItems];
-
-    // Remove them from left list
-    this.leftItems = this.leftItems.filter(
-      item => !this.selectedLeftItems.some(selected => selected.id === item.id)
-    );
-
-    this.clearSelections();
+  getBrandLogoUrl(sourceName: string): string {
+  switch (sourceName.toUpperCase()) {
+    case 'REWE':
+      return 'https://upload.wikimedia.org/wikipedia/commons/5/5a/REWE_Dein_Markt-Logo_neu.png';
+    case 'LIDL':
+      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Lidl-Logo.svg/768px-Lidl-Logo.svg.png';
+    case 'PENNY':
+      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Penny-Logo.svg/2048px-Penny-Logo.svg.png';
+    case 'ALDI':
+      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/AldiWorldwideLogo.svg/1708px-AldiWorldwideLogo.svg.png';
+    default:
+      return '';
+    }
   }
-
-  /!**
-   * Move selected items from right to left
-   *!/
-  moveSelectedToLeft(): void {
-    if (this.selectedRightItems.length === 0) return;
-
-    // Add selected items to left list
-    this.leftItems = [...this.leftItems, ...this.selectedRightItems];
-
-    // Remove them from right list
-    this.rightItems = this.rightItems.filter(
-      item => !this.selectedRightItems.some(selected => selected.id === item.id)
-    );
-
-    this.clearSelections();
-  }
-
-  /!**
-   * Clear all selections
-   *!/
-  clearSelections(): void {
-    this.selectedLeftItems = [];
-    this.selectedRightItems = [];
-  }*/
-
 }

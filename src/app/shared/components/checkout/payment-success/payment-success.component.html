@@ -1,0 +1,23 @@
+<div class="confirmation-container">
+  <div class="icon-wrapper">
+    <div class="success-icon">✔</div>
+  </div>
+  <h2>Payment completed</h2>
+  <div class="order-number">Order number <span class="order-badge">{{ paymentOrderDetails.orderId }}</span></div>
+
+  <div class="transaction-details">
+    <div class="detail-row"><span>Date</span><span>{{ paymentOrderDetails.createdDateTime }}</span></div>
+    <div class="detail-row"><span>Payment Method</span><span>{{ paymentOrderDetails.paymentMode }}</span></div>
+    <div class="detail-row"><span>Total</span><span>{{ paymentOrderDetails.totalOrderPrice }}€</span></div>
+    <div class="detail-row"><span>Email</span><span>{{ email }}</span></div>
+  </div>
+
+  <button class="view-invoice-btn" (click)="viewInvoice()">View invoice</button>
+
+  <footer class="footer">
+    <p>LPA Gmbh,  Große Gallusstraße 9<br>
+    Frankfurt am Main, HE 60311 – Germany</p>
+    <a href="mailto:karanamsaikrishna.kaushik@recipe-book.com">karanamsaikrishna.kaushik@recipe-book.com</a> &nbsp; | &nbsp;
+    <a href="tel:+4917645817964">+49 176 45 81 7964</a>
+  </footer>
+</div>

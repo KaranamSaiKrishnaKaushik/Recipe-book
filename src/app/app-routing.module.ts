@@ -11,11 +11,16 @@ import {CardComponent} from "./shared/components/cards/card-colors/card.componen
 import {RecipeCardsListComponent} from "./shared/components/cards/recipe-cards-list/recipe-cards-list.component";
 import { AuthComponent } from "./shared/components/auth/auth.component";
 import { SettingsComponent } from "./shared/components/settings/settings.component";
+import { ShoppingCartComponent } from "./shared/components/shopping-cart/shopping-cart.component";
+import { CheckoutAddressComponent } from "./shared/components/checkout/checkout-address/checkout-address.component";
+import { CheckoutPaymentComponent } from "./shared/components/checkout/checkout-payment/checkout-payment.component";
+import { CheckoutReviewComponent } from "./shared/components/checkout/checkout-review/checkout-review.component";
+import { PaymentSuccessComponent } from "./shared/components/checkout/payment-success/payment-success.component";
 
 const appRoutes : Routes = [
 
   { path: 'overview', component: RecipeCardsListComponent},
-  { path: '', redirectTo: '/recipes', pathMatch: 'full'},
+  { path: '', redirectTo: '/auth', pathMatch: 'full'},
   { path: 'recipes', component: RecipesComponent,
     children: [
       { path: '', component: RecipeStartComponent},
@@ -28,7 +33,18 @@ const appRoutes : Routes = [
   { path: 'product-list', component: ProductListComponent},
   { path: 'drag-drop-list', component: DragDropListsComponent},
   { path: 'auth', component: AuthComponent },
-  { path: 'settings', component: SettingsComponent }
+  { path: 'settings', component: SettingsComponent },
+  { path: 'cart', component: ShoppingCartComponent },
+  { path: 'checkout', redirectTo: 'checkout/address', pathMatch: 'full' },
+  {
+    path: 'checkout',
+    children: [
+      { path: 'address', component: CheckoutAddressComponent },
+      { path: 'payment', component: CheckoutPaymentComponent },
+      { path: 'review', component: CheckoutReviewComponent },
+      { path: 'payment-success', component: PaymentSuccessComponent},
+    ]
+  }
 ];
 
 @NgModule({

@@ -1,0 +1,7 @@
+<div class="progress-container">
+  <div *ngFor="let step of steps; let i = index" class="step" [class.active]="i <= currentStep - 1">
+    <div class="circle">{{ i < currentStep ? '✔' : i + 1 }}</div>
+    <div class="label">{{ step }}</div>
+    <div class="bar" *ngIf="i < steps.length - 1"></div>
+  </div>
+</div>
