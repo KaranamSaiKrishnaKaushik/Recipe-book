@@ -75,3 +75,6 @@
   background-color: #f0f0f0; /* Neutral gray */
 }
 
+h3 {
+font-family: var(--font-family-primary)
+}

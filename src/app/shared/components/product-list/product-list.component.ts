@@ -67,10 +67,11 @@ export class ProductListComponent implements OnInit {
   decrement(product: Product) {
     if (product.quantity > 1) {
       product.quantity--;
+      this.updateCart(product);
     } else {
       product.quantity = 0;
+      this.cartService.decrementQuantity(product);
     }
-    this.updateCart(product);
   }
 
   updateCart(product: Product) {

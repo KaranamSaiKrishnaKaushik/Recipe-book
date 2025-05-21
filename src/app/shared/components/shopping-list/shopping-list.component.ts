@@ -16,6 +16,7 @@ import { ProductListService } from '../product-list/product-list.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { CartService } from '../../services/cart.service';
+import { ChartOptions } from 'chart.js';
 
 declare var paypal: any;
 
@@ -45,6 +46,10 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
 
   public topProductNames: string[] = [];
   public topProductCounts: number[] = [];
+  public storeLabels: string[] = [];
+  public storeSpendings: number[] = [];
+  public avgPriceCategoryLabels: string[] = [];
+  public avgPriceCategoryValues: number[] = [];
 
   ngOnInit(): void {
     this.ingredients = this.slService.getIngredients().map((i) => ({
@@ -68,6 +73,8 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
       if (history && history.length > 0) {
       this.prepareSpendingOverTime(history);
       this.prepareTopProducts(history);
+      this.prepareSpendingByStore(history);
+      this.prepareAveragePricePerCategory(history);
   }
     });
   }
@@ -93,7 +100,7 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
   /* Bellow code is for pagination, sorting */
 
   dataSource = new MatTableDataSource<any>();
-  showAll: boolean = false;
+  showAll: boolean = true;
   private _paginator!: MatPaginator;
 
   private _sort!: MatSort;
@@ -204,7 +211,98 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
     this.spendingValues = this.spendingDates.map((d) => +byDate[d].toFixed(2));
   }
 
-  prepareTopProducts(history: any[]) {
+prepareSpendingByStore(history: any[]) {
+  const now = new Date();
+  let startDate: Date;
+
+  switch (this.groupBy) {
+    case 'month':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      break;
+    case 'quarter':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+      break;
+    case '4months':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 4, 1);
+      break;
+    default:
+      startDate = new Date('1970-01-01');
+  }
+
+  const filtered = history.filter(
+    (item: any) => new Date(item.createdDateTime) >= startDate
+  );
+
+  const grouped: Record<string, number> = filtered.reduce((acc: Record<string, number>, item: any) => {
+    const store = item.sourceName || 'Unknown';
+    acc[store] = (acc[store] || 0) + item.price;
+    return acc;
+  }, {});
+
+  const total: number = Object.values(grouped).reduce((sum: number, value: number) => sum + value, 0);
+
+  this.storeLabels = Object.keys(grouped);
+  this.storeSpendings = this.storeLabels.map((store: string) =>
+    +(grouped[store] / total * 100).toFixed(2)
+  );
+}
+
+public spendingByStoreOptions: ChartOptions<'doughnut'> = {
+  responsive: true,
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context: any) {
+          const label = context.label || '';
+          const value = context.raw || 0;
+          return `${label}: ${value}%`;
+        }
+      }
+    },
+    legend: {
+      position: 'bottom'
+    }
+  }
+};
+
+
+prepareTopProducts(history: any[]) {
+  const now = new Date();
+  let startDate: Date;
+
+  switch (this.groupBy) {
+    case 'month':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      break;
+    case 'quarter':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+      break;
+    case '4months':
+      startDate = new Date(now.getFullYear(), now.getMonth() - 4, 1);
+      break;
+    default:
+      startDate = new Date('1970-01-01');
+  }
+
+  const filtered = history.filter(
+    (item) => new Date(item.createdDateTime) >= startDate
+  );
+
+  const freq = filtered.reduce((acc, item) => {
+    acc[item.name] = (acc[item.name] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const sorted = (Object.entries(freq) as [string, number][])
+    .sort(([, countA], [, countB]) => countB - countA)
+    .slice(0, 8);
+
+  this.topProductNames = sorted.map(([name]) => name);
+  this.topProductCounts = sorted.map(([, count]) => count);
+}
+
+
+  prepareTopProductsInGeneral(history: any[]) {
     // 1) Build a frequency map
     const freq = history.reduce((acc, item) => {
       acc[item.name] = (acc[item.name] || 0) + 1;
@@ -223,6 +321,33 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
     this.topProductNames = sorted.map(([name]) => name);
     this.topProductCounts = sorted.map(([, count]) => count);
   }
+
+  prepareAveragePricePerCategory(history: any[]) {
+  const grouped: Record<string, { total: number; count: number }> = {};
+
+  for (const item of history) {
+    const category = item.category || 'Unknown';
+    if (!grouped[category]) {
+      grouped[category] = { total: 0, count: 0 };
+    }
+    grouped[category].total += item.price;
+    grouped[category].count += 1;
+  }
+
+  this.avgPriceCategoryLabels = Object.keys(grouped);
+  this.avgPriceCategoryValues = this.avgPriceCategoryLabels.map(cat => {
+    const avg = grouped[cat].total / grouped[cat].count;
+    return +avg.toFixed(2); // keep 2 decimals
+  });
+}
+
+
+  onGroupChange(group: 'month' | 'quarter' | '4months') {
+  this.groupBy = group;
+  this.prepareSpendingOverTime(this.orderedItemHistoryList);
+  this.prepareTopProducts(this.orderedItemHistoryList);
+  this.prepareSpendingByStore(this.orderedItemHistoryList);
+}
 
   ngAfterViewInit() {
     this.updatePagination();
@@ -298,3 +423,4 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
     });
   }
 }
+

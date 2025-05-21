@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/shared/services/cart.service';
 import { CheckoutService } from 'src/app/shared/services/checkout.service';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 
 @Component({
   selector: 'app-checkout-address',
   templateUrl: './checkout-address.component.html',
-  styleUrls: ['./checkout-address.component.css']
+  styleUrls: ['./checkout-address.component.css'],
 })
 export class CheckoutAddressComponent implements OnInit {
   addressForm!: FormGroup;
@@ -22,40 +23,53 @@ export class CheckoutAddressComponent implements OnInit {
     private fb: FormBuilder,
     private checkoutService: CheckoutService,
     private router: Router,
-    private settingsService: SettingsService) {
-
-  }
+    private settingsService: SettingsService,
+    private cartService: CartService
+  ) {}
   ngOnInit(): void {
-    this.checkoutService.totalPrice$.subscribe(totalPrice => this.totalPrice = totalPrice);
-    this.checkoutService.productsPrice$.subscribe(productPrice => this.productPrice = productPrice);
-    this.checkoutService.pfandPrice$.subscribe(pfand => this.pfand = pfand);
+    this.productPrice = +(localStorage.getItem('productPrice') ?? '0');
+    this.pfand = +(localStorage.getItem('pfandPrice') ?? '0');
+    this.totalPrice = this.productPrice + this.pfand;
+
     this.settingsService.getUser();
-  this.settingsService.user$.subscribe(user => {
-    this.userDetails = user;
-    console.log('this.userDetails :', this.userDetails);
-    this.init();
-  });
+    this.settingsService.user$.subscribe((user) => {
+      this.userDetails = user;
+      console.log('this.userDetails :', this.userDetails);
+      this.init();
+    });
   }
 
-  init(){
+  init() {
     const user = this.userDetails || {};
-    
+
     this.addressForm = this.fb.group({
-    salutation: [user.salutation ?? '', Validators.required],
-    firstName: [user.userFirstName ?? '', Validators.required],
-    lastName: [user.userLastName ?? '', Validators.required],
-    country: [user.country ?? '', Validators.required],
-    street: [user.streetAddress ?? '', Validators.required],
-    houseNumber: [user.houseNumber ?? '', Validators.required],
-    postCode: [user.zipCode ?? '', Validators.required],
-    state: [user.state ?? '', Validators.required],
-    phone: [user.phoneNumber ?? '', Validators.required],
-  });
+      salutation: [user.salutation ?? '', Validators.required],
+      firstName: [user.userFirstName ?? '', Validators.required],
+      lastName: [user.userLastName ?? '', Validators.required],
+      country: [user.country ?? '', Validators.required],
+      street: [user.streetAddress ?? '', Validators.required],
+      houseNumber: [user.houseNumber ?? '', Validators.required],
+      postCode: [user.zipCode ?? '', Validators.required],
+      state: [user.state ?? '', Validators.required],
+      phone: [user.phoneNumber ?? '', Validators.required],
+    });
   }
 
   saveAddress() {
     if (this.addressForm.valid) {
       this.checkoutService.setAddress(this.addressForm.value);
+      localStorage.setItem(
+        'userAddress',
+        JSON.stringify(this.addressForm.value)
+      );
+      if (this.addressForm.dirty) {
+        const updatedUser = {
+          ...this.userDetails,
+          ...this.addressForm.value,
+        };
+        console.log('Address changed, updating user:', updatedUser);
+        this.settingsService.updateUser(updatedUser);
+      }
       this.router.navigate(['/checkout/payment']);
     }
   }
@@ -64,7 +78,7 @@ export class CheckoutAddressComponent implements OnInit {
     this.router.navigate(['/cart']);
   }
 
-   selectGender(option: string) {
+  selectGender(option: string) {
     this.selectedGender = option;
   }
 }

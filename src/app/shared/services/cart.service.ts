@@ -23,7 +23,9 @@ export class CartService {
   url = environment.apiUrl;
   private cartSubject = new BehaviorSubject<Product[]>([]);
   cart$ = this.cartSubject.asObservable();
-  private cartChanged = new Subject<void>();
+  productsPrice: number;
+  pfandPrice: number;
+
 
   private orderHistoryChanged = new BehaviorSubject<PaymentOrderDetails[]>([]);
   orderHistory$ = this.orderHistoryChanged.asObservable();
@@ -46,6 +48,7 @@ export class CartService {
       this.cart.push({ ...product, quantity: 1 });
       this.updateCartProduct(product);
     }
+    this.cartSubject.next(this.cart);
   }
 
   incrementQuantity(product: Product) {
@@ -59,6 +62,7 @@ export class CartService {
             this.updateCartProduct(item);
 
         }
+    this.cartSubject.next(this.cart);
   }
 
   decrementQuantity(product: Product) {
@@ -69,12 +73,14 @@ export class CartService {
     if (item) {
       item.quantity--;
       if (item.quantity <= 0) {
-        this.cart = this.cart.filter((p) => p.id !== product.id);
+        this.cart = this.cart.filter(p => p.productId !== product.productId);
+        this.removeCartProduct(product.productId);
       }else{
         this.updateCartProduct(item);
       }
     
     }
+    this.cartSubject.next(this.cart);
   }
 
   removeCartProduct(productId: string) {
@@ -82,6 +88,7 @@ export class CartService {
     .delete(this.url + `api/products/remove-from-cart/${productId}`)
     .subscribe(() => {
       console.log('Product removed from cart');
+      this.cartSubject.next(this.cart);
     });
 }
 
@@ -93,7 +100,7 @@ export class CartService {
     this.httpClient
       .post<Cart[]>(this.url + 'api/products/add-to-shopping-cart', body)
       .subscribe((cartProducts) => {
-        console.log('Cart Updated');
+        this.cartSubject.next(this.cart);
       });
   }
 
@@ -113,10 +120,10 @@ export class CartService {
       .subscribe((history) => {
         const mappedHistory: PaymentOrderDetails[] = history.map(order => ({
         orderId: order.orderId,
-        totalOrderPrice: order.totalOrderPrice, // Convert to string if needed
+        totalOrderPrice: order.totalOrderPrice, 
         createdDateTime: order.createdDateTime.split('T')[0], // Format date
         isPaymentCompleted: order.isPaymentCompleted,
-        paymentMode: 'Paypal' // Or derive from actual value if available
+        paymentMode: 'Paypal' 
       }));
 
       this.orderHistoryChanged.next(mappedHistory);
@@ -151,5 +158,23 @@ export class CartService {
       .post(this.url + 'api/products/add-cart-bulk', body)
       .subscribe(() => console.log('Cart saved'));
   }
+
+  
+  // getProductTotal(): number {
+  //   this.productsPrice = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  //  // console.log('product function ', this.productsPrice+this.pfandPrice);
+  //   return this.productsPrice;
+  // }
+
+  // getPfandTotal(): number {
+  //   // Assumuption - fixed 0.25€ per product, just for an example
+  //   this.pfandPrice = this.cart.reduce((sum, item) => sum + (item.quantity * 0.25), 0);
+  //  // console.log('pfand function ', this.productsPrice+this.pfandPrice);
+  //   return this.pfandPrice;
+  // }
+
+  // getTotal(): number {
+  //   return this.productsPrice + this.pfandPrice;
+  // }
   
 }

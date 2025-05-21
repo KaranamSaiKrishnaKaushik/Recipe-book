@@ -10,13 +10,8 @@
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
           <label for="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            class="form-control"
-            formControlName="name"
-            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('name')?.invalid }"
-          >
+          <input type="text" id="name" placeholder="Name of your recipe" class="form-control" formControlName="name"
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('name')?.invalid }">
           <div *ngIf="submitted && recipeForm.get('name')?.invalid" class="validation-message">
             Name is required
           </div>
@@ -25,31 +20,15 @@
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
           <label for="category">Category</label>
-          <input
-            type="text"
-            id="category"
-            class="form-control"
-            formControlName="category"
-            [(ngModel)]="categoryName"
-            (input)="filterOptions()"
-            (focus)="dropdownOpen = true"
-            (blur)="closeDropdownWithDelay()"
-            autocomplete="off"
-            required
-            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('category')?.invalid }"
-          >
-          <ul
-             *ngIf="dropdownOpen && filteredOptions.length"
-              class="dropdown-menu show w-100"
-              style="position: absolute; top: 100%; z-index: 1000;"
-           >
-             <li
-                class="dropdown-item"
-                *ngFor="let option of filteredOptions"
-                 (mousedown)="selectOption(option.baseName.name)"
-                >
-               {{ option.baseName.name }}
-              </li>
+          <input type="text" id="category" placeholder="Enter or give it a category name that this recipe would fall into." class="form-control" formControlName="category" [(ngModel)]="categoryName"
+            (input)="filterOptions()" (focus)="dropdownOpen = true" (blur)="closeDropdownWithDelay()" autocomplete="off"
+            required [ngClass]="{ 'is-invalid': submitted && recipeForm.get('category')?.invalid }">
+          <ul *ngIf="dropdownOpen && filteredOptions.length" class="dropdown-menu show w-100"
+            style="position: absolute; top: 100%; z-index: 1000;">
+            <li class="dropdown-item" *ngFor="let option of filteredOptions"
+              (mousedown)="selectOption(option.baseName.name)">
+              {{ option.baseName.name }}
+            </li>
           </ul>
           <div *ngIf="submitted && recipeForm.get('category')?.invalid" class="validation-message">
             Category is required
@@ -59,14 +38,8 @@
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
           <label for="imagePath">Image Path</label>
-          <input
-            type="text"
-            id="imagePath"
-            class="form-control"
-            formControlName="imagePath"
-            #imagePath
-            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('imagePath')?.invalid }"
-          >
+          <input type="text" id="imagePath" placeholder="https://i.guim.co.uk/img/media/794dcaf94ad82a45ac1f288f79c062040346bd76/0_202_4288_2573/master/4288.jpg?width=1200&quality=85&auto=format&fit=max&s=5ce547caf726fc8445fbdf2f34e20809" class="form-control" formControlName="imagePath" #imagePath
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('imagePath')?.invalid }">
           <div *ngIf="submitted && recipeForm.get('imagePath')?.invalid" class="validation-message">
             ImagePath is required
           </div>
@@ -74,21 +47,14 @@
       </div>
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
-          <img
-            [src]="imagePath.value"
-            class="img-responsive">
+          <img [src]="imagePath.value" class="img-responsive">
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
           <label for="description">Description</label>
-          <textarea
-          id="description"
-          rows="7"
-          class="form-control"
-          formControlName="description"
-          [ngClass]="{ 'is-invalid': submitted && recipeForm.get('description')?.invalid }"
-          ></textarea>
+          <textarea id="description" rows="7" placeholder="Give a short description about your recipe" class="form-control" formControlName="description"
+            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('description')?.invalid }"></textarea>
           <div *ngIf="submitted && recipeForm.get('description')?.invalid" class="validation-message">
             Description is required
           </div>
@@ -96,48 +62,41 @@
       </div>
       <div class="row">
         <div class="col-xs-12" formArrayName="ingredients">
-          <div class="row"
-               *ngFor="let ingredientCtrl of controls; let i = index"
-               [formGroupName]="i"
-               style="margin-top: 10px"
-          >
+          <div class="row" *ngFor="let ingredientCtrl of controls; let i = index" [formGroupName]="i"
+            style="margin-top: 10px">
             <div formGroupName="baseName" class="col-xs-8">
-              <input
-              type="text"
+              <input 
+              type="text" 
               class="form-control"
-              formControlName="name"
-              >
+              placeholder="Chease"
+              [ngClass]="{ 'is-invalid': submitted && ingredientCtrl.get('baseName.name')?.invalid }"
+              formControlName="name">
             </div>
             <div class="col-xs-2">
-              <input
-                type="text"
-                class="form-control"
-                formControlName="amount"
-              >
+              <input type="text" 
+              class="form-control" 
+              placeholder="2"
+              [ngClass]="{ 'is-invalid': submitted && ingredientCtrl.get('amount')?.invalid }"
+              formControlName="amount">
             </div>
             <div class="col-xs-2">
               <button class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
             </div>
+            
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px">
-          <button class="btn btn-success" (click)="onAddIngredient()">Add Ingredient</button>
+          <button type="button" class="btn btn-success" (click)="onAddIngredient()">Add Ingredient</button>
         </div>
       </div>
 
       <div class="row">
         <div class="col-xs-12" style="margin-top: 10px; margin-bottom: 30px">
           <label for="instructions">Instructions</label>
-          <textarea
-            id="instructions"
-            rows="7"
-            class="form-control"
-            formControlName="instructions"
-            [ngClass]="{ 'is-invalid': submitted && recipeForm.get('instructions')?.invalid }"
-          ></textarea>
+          <textarea id="instructions" [ngClass]="{ 'is-invalid': submitted && recipeForm.get('instructions')?.invalid }" rows="7" placeholder="How do you prepare it step by step procedure of preparing your recipe" class="form-control" formControlName="instructions"
+            ></textarea>
           <div *ngIf="submitted && recipeForm.get('instructions')?.invalid" class="validation-message">
             Instructions are required
           </div>
@@ -145,6 +104,7 @@
       </div>
     </form>
     <!-- Displaying the alert box -->
-  <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType" (close)="onCloseAlert()"></app-alert-box>
+    <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType"
+      (close)="onCloseAlert()"></app-alert-box>
   </div>
 </div>

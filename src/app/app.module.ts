@@ -38,7 +38,6 @@ import { AuthComponent } from './shared/components/auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { AuthInterceptorService } from './shared/components/auth/auth-interceptor.service';
 import { AuthGuard } from './shared/components/auth/auth.guard';
-import { AlertBoxComponent } from './shared/components/alert-box/alert-box.component';
 import { SettingsComponent } from './shared/components/settings/settings.component';
 import { SettingsService } from './shared/services/settings.service';
 import { ShoppingCartComponent } from './shared/components/shopping-cart/shopping-cart.component';
@@ -48,6 +47,8 @@ import { CheckoutReviewComponent } from './shared/components/checkout/checkout-r
 import { CheckoutProgressComponent } from './shared/components/checkout/checkout-progress/checkout-progress.component';
 import { PaymentSuccessComponent } from './shared/components/checkout/payment-success/payment-success.component';
 import { NgChartsModule } from 'ng2-charts';
+import { ClickOutsideDirective } from './core/directives/click-outside.directive';
+import { AlertBoxComponent } from './core/alert-box/alert-box.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { NgChartsModule } from 'ng2-charts';
     RecipeItemComponent,
     RecipeStartComponent,
     DropdownDirective,
+    ClickOutsideDirective,
     ProductListComponent,
     DragDropListsComponent,
     CardComponent,

@@ -46,3 +46,30 @@
 .chart-wrapper h4 {
   margin-bottom: 0.5rem;
 }
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.charts-container .chart-wrapper {
+  margin-bottom: 2rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h4,th,td {
+font-family: var(--font-family-primary);
+text-align: center;
+}
+
+::ng-deep .custom-toggle.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: var(--color-toggle-on);
+}
+
+::ng-deep .custom-toggle.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: var(--color-toggle-off); 
+}

@@ -1,63 +1,43 @@
-<div class="card-grid" >
-<!--
-  <app-card
-    title="Nebula"
-    content="A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases."
-    footer="By Wikipedia"
-    imageUrl="https://as1.ftcdn.net/v2/jpg/07/56/58/98/1000_F_756589847_THNslP3rKskFxxZH7rEDmGXp28hnTuzj.jpg"
-    link="../recipes/0"
-  >
+<div class="card-grid">
 
-  </app-card>
-
-  <app-card
-    title="Galaxy"
-    content="A galaxy is a system of stars, stellar remnants, interstellar gas, dust, dark matter, bound together by gravity."
-    footer="By NASA"
-    imageUrl="https://upload.wikimedia.org/wikipedia/commons/c/c3/NGC_4414_%28NASA-med%29.jpg"
-    link="../recipes/3"
-  ></app-card>
--->
-
-  <app-card *ngFor="let recipe of recipes; let i = index"
-            [title]="recipe.name"
-            [content]="truncate(recipe.description, 20)"
-            [footer]="'Pizza'"
-            [imageUrl]="recipe.imagePath"
-            (cardClick)="onCardSelected(recipe)"
-  >
+  <app-card *ngFor="let recipe of recipes; let i = index" [title]="recipe.name"
+    [content]="truncate(recipe.description, 20)" [footer]="'Pizza'" [imageUrl]="recipe.imagePath"
+    (cardClick)="onCardSelected(recipe)">
   </app-card>
 </div>
 
-
-<!--link="../recipes/{{i}}"-->
-
 <div class="overlay" *ngIf="selectedCard">
 
-
-
-  <div class="overlay-content">
-    <!-- Button Bar -->
+  <div class="overlay-content" appClickOutside (clickOutside)="closeOverlay()">
     <div class="button-bar">
-      <button class="print-btn" (click)="printCard()">Print</button>
-      <button class="close-btn" (click)="closeOverlay()">Close</button>
+      <div class="left-buttons">
+
+        <button class="print-btn" (click)="printCard()"><i class="fa-solid fa-print fa-xl"></i></button>
+        <button class="share-btn" (click)="sharePDFViaAPI2()">
+          <i class="fa-brands fa-whatsapp"></i>
+        </button>
+      </div>
+      <button class="close-btn" (click)="closeOverlay()"><i class="fa-solid fa-circle-xmark fa-2xl"></i></button>
     </div>
 
     <div class="print-card">
-        <img [src]="selectedCard.imagePath" />
-        <h2>{{ selectedCard.name }}</h2>
-        <p>{{ selectedCard.description }}</p>
+      <h2>{{ selectedCard.name }}</h2>
+      <div style="display: flex; justify-content: center;">
+        <img [src]="selectedCard.imagePath" style="max-height: 400px;" />
+      </div>
+      <p>{{ selectedCard.description }}</p>
 
-        <h4><b><u>Ingredients</u></b></h4>
-        <ul class="ingredients">
-          <li *ngFor="let ingredient of selectedCard.ingredients">
-            {{ ingredient.baseName.name }}</li>
-        </ul>
+      <h4><b><u>Ingredients</u></b></h4>
+      <ul class="ingredients">
+        <li *ngFor="let ingredient of selectedCard.ingredients">
+          {{ ingredient.baseName.name }}</li>
+      </ul>
 
-<!--        <h4>Cooking Instructions</h4>
-        <ol>
+      <h4><b><u>Cooking Instructions</u></b></h4>
+      <!-- <ol>
           <li *ngFor="let step of selectedCard.instructions">{{ step }}</li>
-        </ol>-->
+        </ol> -->
+      <p style="white-space: pre-line;">{{ selectedCard.instructions }}</p>
     </div>
   </div>
 </div>

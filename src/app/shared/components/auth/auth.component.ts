@@ -60,7 +60,7 @@ export class AuthComponent implements OnInit{
       resData=>{
         console.log(resData);
         this.isLoading = false;
-        this.router.navigate(['recipes'])
+        this.router.navigate(['overview'])
 
       }, errorMessage=>{
         setTimeout(() => {

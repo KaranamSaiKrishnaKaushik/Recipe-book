@@ -19,6 +19,8 @@
       </ul>
     </div>
   </div>
+      <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType"
+      (close)="onCloseAlert()"></app-alert-box>
 </div>
 <br>
 <div class="row">
