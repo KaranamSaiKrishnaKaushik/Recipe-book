@@ -2,14 +2,14 @@
   max-width: 480px;
   margin: 60px auto;
   text-align: center;
-  font-family: 'Segoe UI', sans-serif;
+  /* font-family: 'Segoe UI', sans-serif; */
   padding: 24px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border-radius: 12px;
 }
 
 .icon-wrapper {
-  background-color: #256029;
+  background-color: var(--color-payment-success-primary);
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -63,7 +63,7 @@ h2 {
 }
 
 .view-invoice-btn {
-  background-color: #256029;
+  background-color: var(--color-payment-success-primary);
   color: #fff;
   border: none;
   padding: 12px 24px;
@@ -73,7 +73,7 @@ h2 {
 }
 
 .view-invoice-btn:hover {
-  background-color: #1d4f22;
+  background-color: var(--color-payment-success-hover);
 }
 
 .footer {
@@ -83,6 +83,15 @@ h2 {
 }
 
 .footer a {
-  color: #256029;
+  color: var(--color-payment-success-primary);
   text-decoration: none;
+}
+
+app-checkout-progress {
+  display: block;
+  margin-bottom: 2rem;
+}
+
+h2 {
+font-family: var(--font-family-primary);
 }

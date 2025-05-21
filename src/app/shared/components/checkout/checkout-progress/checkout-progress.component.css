@@ -1,10 +1,11 @@
 .progress-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* important for vertical stacking */
   margin-bottom: 2rem;
   padding: 0 1rem;
   overflow-x: auto;
+  gap: 1rem;
 }
 
 .step {
@@ -23,25 +24,45 @@
   height: 32px;
   line-height: 32px;
   text-align: center;
-  font-weight: bold;
-  margin-bottom: 4px;
+  /* font-weight: bold; */
+  margin: 0 auto 6px;
+  z-index: 1;
 }
 
 .step.active .circle {
-  background: #d00;
+  background: var(--color-progress-bar); 
+  /* #d00; */
   color: white;
+}
+
+.label {
+  font-size: 1rem;
+  margin-top: 4px;
+  color: #444;
+  white-space: nowrap;
 }
 
 .bar {
   position: absolute;
   top: 16px;
   left: 50%;
+  width: 100%;
+  height: 4px;
+  background: #ccc;
+  z-index: 0;
+}
+
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
   right: -50%;
   height: 4px;
   background: #ccc;
-  z-index: -1;
+  z-index: 0;
 }
 
-.step.active ~ .bar {
-  background: #d00;
+.step.active:not(:last-child)::after {
+  background: var(--color-progress-bar); 
 }

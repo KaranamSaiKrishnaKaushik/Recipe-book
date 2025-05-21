@@ -34,7 +34,7 @@ export class ShoppingListService implements OnInit {
 
   addSingleIngredientToList(ingredient: Ingredient){
     console.log(JSON.stringify(ingredient));
-    this.changeIngredientOrderList(ingredient, 'add-ingredient-order');
+    this.changeIngredientOrderList(ingredient, 'add-single-ingredient');
   }
 
   addMultipleIngredientsToList(ingredients: Ingredient[]) {

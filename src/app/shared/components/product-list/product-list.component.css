@@ -39,7 +39,7 @@
 /* Highlighted state for selected items*/
 .selected {
   background-color: #e3f2fd !important;
-  border-left: 4px solid #1976d2 !important;
+  border-left: 4px solid #1976d2 !important; 
 }
 
 /* Drag animation classes*/
@@ -108,19 +108,6 @@ img {
   margin-top: 0rem;
 }
 
-
-/* .product-name {
-  font-size: 14px;
-  font-weight: 200;
-  line-height: 1.2;                 Ensure there's room for tall letters 
-  height: 2.8em;                    2 lines × 1.4 line-height 
-  display: -webkit-box;
-  -webkit-line-clamp: 2;           Show max 2 lines 
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
-
 select {
   width: 100%;
   margin: 0.5rem 0;
@@ -160,15 +147,13 @@ select {
 }
 
 .card-footer button {
-  /* border: 1px solid #f44336;
-  background: white; */
   padding: 4px 12px;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .card-footer button:hover {
-  background: #f44336;
+  background: var(--color-primary-hover);/*#216275; */
   color: white;
 }
 
@@ -193,7 +178,8 @@ select {
 
 /* product-list.component.css */
  .has-text-align-center {
-    font-family: "Playfair Display", serif;
+     font-family: var(--font-family-primary);
+    /*"Playfair Display", serif; */
     font-optical-sizing: auto;
     text-align: center;
   }
@@ -206,7 +192,7 @@ select {
 }
 
 .product-card {
-  width: 220px;
+  width: 200px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -227,7 +213,7 @@ select {
 }
 
 .brand {
-  color: #e60000; /* REWE red */
+  color: #e60000;
   font-weight: bold;
   font-size: 14px;
 }
@@ -300,14 +286,14 @@ select {
   margin-top: 1.5rem;
   gap: 0.5rem;
   flex-wrap: wrap;
-  padding-bottom: 3rem; /* ✅ 3: Add bottom spacing */
+  padding-bottom: 3rem; 
 }
 
 .pagination-controls button {
   background-color: white;
   border: 1px solid #ccc;
-  border-radius: 8px; /* ✅ 1: Rounded square instead of circle */
-  padding: 8px 14px;   /* ✅ 2: Slightly bigger buttons */
+  border-radius: 8px; 
+  padding: 8px 14px;  
   font-size: 15px;
   min-width: 38px;
   cursor: pointer;
@@ -384,7 +370,7 @@ select {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: var(--color-toggle-on);/*#2196F3*/
 }
 
 input:checked + .slider:before {
@@ -394,4 +380,8 @@ input:checked + .slider:before {
 .switch-text {
   font-size: 0.95rem;
   color: #333;
+}
+
+h6 {
+font-family: var(--font-family-primary);
 }

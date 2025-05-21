@@ -42,7 +42,7 @@
 }
 
 .item-price {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .cart-quantity {
@@ -54,42 +54,27 @@
 .cart-quantity button {
   width: 32px;
   height: 32px;
-  font-size: 1.4rem;  /*18px; */
+  font-size: 1rem;  /*18px; */
   background: #eee;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
+.cart-quantity button:hover {
+  background: var(--color-primary-hover);/*#216275; */
+  color: white;
+}
+
+
 .item-total {
   font-weight: bold;
   width: 120px;
   text-align: right;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
-.cart-summary {
-  flex: 1;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 8px;
-  align-self: flex-start;
-  min-width: 200px;
-  max-height: fit-content;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 2rem;
-}
 
-.cart-summary p {
-  margin: 0.75rem 0;
-  font-size: 1.4rem;
-}
-
-.cart-summary strong {
-  color: #e60000;
-  font-size: 1.4rem;
-}
 /* Fixed height with scroll */
 .order-history {
   max-height: 250px;
@@ -123,7 +108,7 @@
 
 .order-table th,
 .order-table td {
-  font-size: 1.1rem;
+  font-size: 1rem;
   padding: 0.5rem;
   text-align: center;
   border-bottom: 1px solid #eee;
@@ -152,7 +137,7 @@
 }
 
  .has-text-align-center {
-    font-family: "Playfair Display", serif;
+    font-family: var(--font-family-primary);/*"Playfair Display", serif;*/
     font-optical-sizing: auto;
     text-align: center;
   }
@@ -167,7 +152,7 @@
 .button-group button {
   min-width: 5rem;
   padding: 0.75rem 1.55rem;
-  background-color: #d00;
+  background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -178,4 +163,21 @@
   background-color: #aaa; 
   cursor: not-allowed;
   opacity: 0.8; 
+}
+
+.brand-logo-inline {
+  max-height: 28px;
+  width: auto;
+  vertical-align: middle;
+  object-fit: contain;
+
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 0 0 8px !important;
+}
+
+h2, h3 {
+font-family: var(--font-family-primary);
 }

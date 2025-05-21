@@ -14,8 +14,8 @@ declare var paypal: any;
 })
 export class CheckoutReviewComponent implements OnInit {
   address = this.checkoutService.getAddress();
-  paymentMethod = 'Paypal'; //this.checkoutService.getPaymentMethod();
-  total = 51.2; //this.checkoutService.getTotal();
+  paymentMethod = 'Paypal';
+  total = 51.2;
   paypalSandboxClientId = environment.paypalSandboxClientId;
   private apiUrl = environment.apiUrl;
   totalPrice: number = 0;
@@ -29,19 +29,18 @@ export class CheckoutReviewComponent implements OnInit {
     private cartService: CartService
   ) {}
 
-  ngOnInit(): void {
-    this.checkoutService.totalPrice$.subscribe(
-      (totalPrice) => (this.totalPrice = totalPrice)
-    );
-    this.checkoutService.productsPrice$.subscribe(
-      (productPrice) => (this.productPrice = productPrice)
-    );
-    this.checkoutService.pfandPrice$.subscribe((pfand) => (this.pfand = pfand));
-
-    this.cartService.cart$.subscribe((cartItems) => {
-      this.cartItems = cartItems;
-    });
+    ngOnInit(): void {
+     this.cartService.loadCartFromApi();
+     this.cartService.cart$.subscribe(cart => this.cartItems = cart);
+    this.productPrice = +(localStorage.getItem('productPrice') ?? '0');
+    this.pfand = +(localStorage.getItem('pfandPrice') ?? '0');
+    this.totalPrice = this.productPrice + this.pfand;
+    this.paymentMethod = localStorage.getItem('paymentMode') ?? '';
+    console.log('adress :', this.address);
+    this.address = JSON.parse(localStorage.getItem('userAddress') ?? '{}');
+    console.log('adress from Local Storage:', this.address);
   }
+
   placeOrder() {
     if (this.cartItems.length > 0) {
       console.log('Cart Items :', this.cartItems);
@@ -107,6 +106,9 @@ export class CheckoutReviewComponent implements OnInit {
                       ' order Id :' +
                       data.orderID
                   );
+                      localStorage.removeItem('productPrice');
+                      localStorage.removeItem('pfandPrice');
+                      localStorage.removeItem('paymentMode');
                   //alert('Transaction of '+ amount +' '+ currency+' completed by ' + details.payer.name.given_name);
                   this.toPaymentSuccess();
                 })

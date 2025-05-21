@@ -4,8 +4,8 @@
   <div class="cart-items-container">
 
     <!-- Order History -->
-     <h3 class="has-text-align-center">Order History</h3>
-    <div class="order-history">
+    <h3 *ngIf="orderHistoryList.length>0" class="has-text-align-center">Order History</h3>
+    <div *ngIf="orderHistoryList.length>0" class="order-history">
       <div class="order-history-scroll">
         <table class="order-table">
           <thead>
@@ -46,6 +46,7 @@
             <button (click)="decrement(item)">−</button>
             <span>{{ item.quantity }}</span>
             <button (click)="increment(item)">+</button>
+            <img [src]="getBrandLogoUrl(item.sourceName)" [alt]="item.sourceName + ' logo'" class="brand-logo-inline" />
           </div>
         </div>
         <div class="item-total">Total: {{ item.price * item.quantity | number:'1.2-2' }} €</div>

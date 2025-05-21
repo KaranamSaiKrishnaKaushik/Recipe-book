@@ -26,7 +26,10 @@
     "chart.js": "^3.9.1",
     "eva-icons": "^1.1.2",
     "firebase": "^11.6.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "ng2-charts": "^3.1.2",
+    "pdfmake": "^0.2.20",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -38,6 +41,7 @@
     "@schematics/angular": "~13.0.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@types/pdfmake": "^0.2.11",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/shared/services/cart.service';
 import { CheckoutService } from 'src/app/shared/services/checkout.service';
 
 @Component({
   selector: 'app-checkout-payment',
   templateUrl: './checkout-payment.component.html',
-  styleUrls: ['./checkout-payment.component.css']
+  styleUrls: ['./checkout-payment.component.css'],
 })
 export class CheckoutPaymentComponent implements OnInit {
   selectedPayment: string = '';
@@ -13,12 +14,16 @@ export class CheckoutPaymentComponent implements OnInit {
   totalPrice: number = 0;
   productPrice: number = 0;
   pfand: number = 0;
-  constructor(private checkoutService: CheckoutService, private router: Router) {}
+  constructor(
+    private checkoutService: CheckoutService,
+    private router: Router,
+    private cartService: CartService
+  ) {}
 
-    ngOnInit(): void {
-    this.checkoutService.totalPrice$.subscribe(totalPrice => this.totalPrice = totalPrice);
-    this.checkoutService.productsPrice$.subscribe(productPrice => this.productPrice = productPrice);
-    this.checkoutService.pfandPrice$.subscribe(pfand => this.pfand = pfand);
+  ngOnInit(): void {
+    this.productPrice = +(localStorage.getItem('productPrice') ?? '0');
+    this.pfand = +(localStorage.getItem('pfandPrice') ?? '0');
+    this.totalPrice = this.productPrice + this.pfand;
   }
 
   selectPayment(option: string) {
@@ -28,11 +33,13 @@ export class CheckoutPaymentComponent implements OnInit {
   proceed() {
     if (this.selectedPayment) {
       //this.checkoutService.setPaymentMethod(this.selectedPayment);
+      localStorage.setItem('paymentMode', this.selectedPayment);
       this.router.navigate(['/checkout/review']);
     }
   }
 
-  backToAddress(){
-    this.router.navigate(['/checkout/address']);  
+  backToAddress() {
+    localStorage.removeItem('paymentMode');
+    this.router.navigate(['/checkout/address']);
   }
 }

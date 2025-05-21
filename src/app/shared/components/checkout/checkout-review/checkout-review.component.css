@@ -10,36 +10,6 @@
   min-width: 300px;
 }
 
-.checkout-right {
-  flex: 1;
-  background: #f8f8f8;
-  padding: 1rem;
-  border-radius: 8px;
-  min-width: 280px;
-}
-
-.cart-summary {
-  flex: 1;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 8px;
-  align-self: flex-start;
-  min-width: 200px;
-  max-height: fit-content;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 2rem;
-}
-
-.cart-summary p {
-  margin: 0.75rem 0;
-  font-size: 1.4rem;
-}
-
-.cart-summary strong {
-  color: #e60000;
-  font-size: 1.4rem;
-}
 
 .section-title {
   font-size: 1.4rem;
@@ -69,9 +39,21 @@
 .button-group button {
   min-width: 5rem;
   padding: 0.75rem 1.55rem;
-  background-color: #d00;
-  color: white;
+  background-color: var(--color-primary); /*#d00;*/
+  color: var(--color-background-primary);/*white;*/
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+h2,h3 {
+font-family: var(--font-family-primary);
+text-align: center;
+}
+
+.paypal-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }

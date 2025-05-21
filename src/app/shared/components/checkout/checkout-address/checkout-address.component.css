@@ -11,13 +11,6 @@
   min-width: 300px;
 }
 
-.checkout-right {
-  flex: 1;
-  background: var(--color-light-gray);
-  padding: 1rem;
-  border-radius: 8px;
-  min-width: 280px;
-}
 
 .address-form input,
 .address-form select {
@@ -51,9 +44,9 @@
 }
 
 .salutation-buttons button.selected {
-  background-color: var(--color-primary-dark); /* red */
+  background-color: var(--color-primary); /* red */
   color: var(--color-background-primary);
-  border-color: var(--color-primary-dark);
+  border-color: var(--color-primary);
 }
 
 
@@ -66,28 +59,6 @@
   padding: 0 2rem;
 }
 
-.cart-summary {
-  flex: 1;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 8px;
-  align-self: flex-start;
-  min-width: 200px;
-  max-height: fit-content;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 2rem;
-}
-
-.cart-summary p {
-  margin: 0.75rem 0;
-  font-size: 1.4rem;
-}
-
-.cart-summary strong {
-  color: #e60000;
-  font-size: 1.4rem;
-}
 
 .button-group button {
   min-width: 5rem;
@@ -103,4 +74,9 @@
   background-color: var(--color-disabled); 
   cursor: not-allowed;
   opacity: 0.8; 
+}
+
+h2 {
+font-family: var(--font-family-primary);
+text-align: center;
 }

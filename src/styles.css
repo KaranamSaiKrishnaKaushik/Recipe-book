@@ -1,21 +1,102 @@
-/* You can add global styles to this file, and also import other style files */
+@import './styles/shared-styles.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  /*"Pacifico", cursive !important;*/
+  /* 'Segoe UI', sans-serif; */
+  /* "Playfair Display", serif; */
+  font-size: 14px;
+  background-color: rgb(235, 246, 250); /*rgb(182, 194, 196); rgb(220, 223, 224); rgb(245, 207, 221);*/
+  color: #333;
+}
 
+/*The following will apply to explicitly mentioned headings and other components and the above will apply to the whole application*/
 :root {
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
 
-  --color-primary: #d00;
-  --color-primary-hover: rgb(224, 150, 150);
-  --color-primary-dark: #b71c1c;
+  --color-primary-hover: #517891;
+  --color-primary: #4f85aa;
+  --color-progress-bar: #18700c; 
+  --color-primary-dark: #90d5ff; 
+  --color-primary-active: #66a7cc;
   --color-disabled: #aaa;
   --color-light-gray: #f8f8f8;
   --color-border: #ccc;
   --color-background-primary: white;
+  --color-toggle-on: #2196F3;
+  --color-toggle-off: white;
+  --color-payment-success-primary: #256029; 
+  --color-payment-success-hover: #1d4f22;
 
   --button-radius: 4px;
   --button-padding: 0.75rem 1.5rem;
+
+  --font-family-primary: "Playfair Display", serif;
+}
+
+.checkout-right {
+  flex: 1;
+  background: #f8f8f8;
+  padding: 1rem;
+  border-radius: 8px;
+  min-width: 280px;
+}
+
+.cart-summary {
+  flex: 1;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  align-self: flex-start;
+  min-width: 280px;
+  max-height: fit-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 2rem;
+}
+
+.cart-summary p {
+  margin: 0.75rem 0;
+  font-size: 1rem;
+}
+
+.cart-summary strong {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);  
+  border-color: var(--color-primary);
+  color: white;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);  
+  border-color: var(--color-primary-hover);
+  /* color: white; */
+}
+
+/* Override focus state */
+.btn-primary:focus,
+.btn-primary.focus {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  outline: none;
+  box-shadow: 0 0 0 0.2rem var(--color-primary); 
+}
+
+/* Override active state */
+.btn-primary:active,
+.btn-primary.active {
+  background-color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
+  color: white;
+  box-shadow: none;
+  outline: none;
 }
