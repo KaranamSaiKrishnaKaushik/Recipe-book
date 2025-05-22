@@ -110,13 +110,17 @@ export class ProductListComponent implements OnInit {
       return;
     }
 
-    const searchModel: ProductSearch = {
-      source: 'all-stores',
-      names: [this.searchAll.trim().toLowerCase()],
-    };
-    this.plService.getProductsByName(searchModel).subscribe((products) => {
-      this.pagedProducts = products;
-    });
+    this.plService
+      .translateToGerman(this.searchAll.trim())
+      .then((translatedTerm) => {
+        const searchModel: ProductSearch = {
+          source: 'all-stores',
+          names: [translatedTerm.toLowerCase()],
+        };
+        this.plService.getProductsByName(searchModel).subscribe((products) => {
+          this.pagedProducts = products;
+        });
+      });
   }
 
   changePage(page: number) {
@@ -161,17 +165,17 @@ export class ProductListComponent implements OnInit {
   }
 
   getBrandLogoUrl(sourceName: string): string {
-  switch (sourceName.toUpperCase()) {
-    case 'REWE':
-      return 'https://upload.wikimedia.org/wikipedia/commons/5/5a/REWE_Dein_Markt-Logo_neu.png';
-    case 'LIDL':
-      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Lidl-Logo.svg/768px-Lidl-Logo.svg.png';
-    case 'PENNY':
-      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Penny-Logo.svg/2048px-Penny-Logo.svg.png';
-    case 'ALDI':
-      return 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/AldiWorldwideLogo.svg/1708px-AldiWorldwideLogo.svg.png';
-    default:
-      return '';
+    switch (sourceName.toUpperCase()) {
+      case 'REWE':
+        return 'https://upload.wikimedia.org/wikipedia/commons/5/5a/REWE_Dein_Markt-Logo_neu.png';
+      case 'LIDL':
+        return 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Lidl-Logo.svg/768px-Lidl-Logo.svg.png';
+      case 'PENNY':
+        return 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Penny-Logo.svg/2048px-Penny-Logo.svg.png';
+      case 'ALDI':
+        return 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/AldiWorldwideLogo.svg/1708px-AldiWorldwideLogo.svg.png';
+      default:
+        return '';
     }
   }
 }

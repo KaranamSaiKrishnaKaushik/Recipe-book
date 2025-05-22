@@ -26,11 +26,12 @@ export class CartService {
   productsPrice: number;
   pfandPrice: number;
 
-
   private orderHistoryChanged = new BehaviorSubject<PaymentOrderDetails[]>([]);
   orderHistory$ = this.orderHistoryChanged.asObservable();
 
-  private orderedItemHistoryChanged = new BehaviorSubject<OrderedItemHistory[]>([]);
+  private orderedItemHistoryChanged = new BehaviorSubject<OrderedItemHistory[]>(
+    []
+  );
   orderedItemHistory$ = this.orderedItemHistoryChanged.asObservable();
 
   constructor(private httpClient: HttpClient) {}
@@ -52,45 +53,36 @@ export class CartService {
   }
 
   incrementQuantity(product: Product) {
-    const item = this.cart.find(
-        (p) => 
-            p.productId === product.productId
-    );
-    if (item) 
-        {
-            item.quantity++;
-            this.updateCartProduct(item);
-
-        }
+    const item = this.cart.find((p) => p.productId === product.productId);
+    if (item) {
+      item.quantity++;
+      this.updateCartProduct(item);
+    }
     this.cartSubject.next(this.cart);
   }
 
   decrementQuantity(product: Product) {
-    const item = this.cart.find(
-        (p) => 
-            p.productId === product.productId
-    );
+    const item = this.cart.find((p) => p.productId === product.productId);
     if (item) {
       item.quantity--;
       if (item.quantity <= 0) {
-        this.cart = this.cart.filter(p => p.productId !== product.productId);
+        this.cart = this.cart.filter((p) => p.productId !== product.productId);
         this.removeCartProduct(product.productId);
-      }else{
+      } else {
         this.updateCartProduct(item);
       }
-    
     }
     this.cartSubject.next(this.cart);
   }
 
   removeCartProduct(productId: string) {
-  this.httpClient
-    .delete(this.url + `api/products/remove-from-cart/${productId}`)
-    .subscribe(() => {
-      console.log('Product removed from cart');
-      this.cartSubject.next(this.cart);
-    });
-}
+    this.httpClient
+      .delete(this.url + `api/products/remove-from-cart/${productId}`)
+      .subscribe(() => {
+        console.log('Product removed from cart');
+        this.cartSubject.next(this.cart);
+      });
+  }
 
   updateCartProduct(product: Product) {
     const body = {
@@ -113,38 +105,37 @@ export class CartService {
       });
   }
 
-  
   loadOrderHistory() {
     this.httpClient
       .get<any[]>(this.url + 'api/orders/history')
       .subscribe((history) => {
-        const mappedHistory: PaymentOrderDetails[] = history.map(order => ({
-        orderId: order.orderId,
-        totalOrderPrice: order.totalOrderPrice, 
-        createdDateTime: order.createdDateTime.split('T')[0], // Format date
-        isPaymentCompleted: order.isPaymentCompleted,
-        paymentMode: 'Paypal' 
-      }));
+        const mappedHistory: PaymentOrderDetails[] = history.map((order) => ({
+          orderId: order.orderId,
+          totalOrderPrice: order.totalOrderPrice,
+          createdDateTime: order.createdDateTime.split('T')[0], // Format date
+          isPaymentCompleted: order.isPaymentCompleted,
+          paymentMode: 'Paypal',
+        }));
 
-      this.orderHistoryChanged.next(mappedHistory);
+        this.orderHistoryChanged.next(mappedHistory);
       });
   }
 
-    loadOrderedItemHistory() {
+  loadOrderedItemHistory() {
     this.httpClient
       .get<any[]>(this.url + 'api/orders/items')
       .subscribe((history) => {
-        const mappedHistory: OrderedItemHistory[] = history.map(order => ({
-        orderId: order.orderId,
-        name: order.name,
-        price: order.price,
-        createdDateTime: order.createdDateTime.split('T')[0],
-        category: order.category,
-        isOnSale: order.isOnSale, 
-        sourceName: order.sourceName
-      }));
+        const mappedHistory: OrderedItemHistory[] = history.map((order) => ({
+          orderId: order.orderId,
+          name: order.name,
+          price: order.price,
+          createdDateTime: order.createdDateTime.split('T')[0],
+          category: order.category,
+          isOnSale: order.isOnSale,
+          sourceName: order.sourceName,
+        }));
 
-      this.orderedItemHistoryChanged.next(mappedHistory);
+        this.orderedItemHistoryChanged.next(mappedHistory);
       });
   }
 
@@ -159,22 +150,4 @@ export class CartService {
       .subscribe(() => console.log('Cart saved'));
   }
 
-  
-  // getProductTotal(): number {
-  //   this.productsPrice = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  //  // console.log('product function ', this.productsPrice+this.pfandPrice);
-  //   return this.productsPrice;
-  // }
-
-  // getPfandTotal(): number {
-  //   // Assumuption - fixed 0.25€ per product, just for an example
-  //   this.pfandPrice = this.cart.reduce((sum, item) => sum + (item.quantity * 0.25), 0);
-  //  // console.log('pfand function ', this.productsPrice+this.pfandPrice);
-  //   return this.pfandPrice;
-  // }
-
-  // getTotal(): number {
-  //   return this.productsPrice + this.pfandPrice;
-  // }
-  
 }

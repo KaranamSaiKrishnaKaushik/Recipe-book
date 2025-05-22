@@ -3,18 +3,20 @@ nav.navbar {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* Keep it above other content */
+  z-index: 1000; 
   border-bottom: 1px solid #ddd;
 }
 
 .container {
-  margin-top: 10px; /* adjust based on your header height */
+  margin-top: 10px; 
 }
 
 .cart-badge {
   position: absolute;
   top: -1px;
   right: -10px;
+  width: 20px;
+  height: 20px;
   background-color: var(--color-primary);
   color: white;
   font-size: 10px;
@@ -23,4 +25,8 @@ nav.navbar {
   font-weight: bold;
   line-height: 2;
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
