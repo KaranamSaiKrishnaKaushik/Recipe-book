@@ -85,17 +85,25 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
     this.slService.startedEditing.next(index);
   }
 
-  onToMarketPlace() {
-    console.log('ingredients: ', this.ingredients);
-    let ingredientNames = [];
-    for (let ingredient of this.ingredients) {
-      ingredientNames.push(ingredient.name);
-    }
-    let productSearch = new ProductSearch('all-stores', ingredientNames);
-    console.log('productSearch: ', productSearch);
-    this.plService.searchAndUpdateMatchedProducts(productSearch);
-    this.router.navigate(['/product-list'], { relativeTo: this.route });
-  }
+onToMarketPlace() {
+  console.log('ingredients: ', this.ingredients);
+
+  const translationPromises = this.ingredients.map(ingredient =>
+    this.plService.translateToGerman(ingredient.name)
+  );
+
+  Promise.all(translationPromises)
+    .then(translatedNames => {
+      console.log('Translated ingredient names: ', translatedNames);
+
+      const productSearch = new ProductSearch('all-stores', translatedNames);
+      this.plService.searchAndUpdateMatchedProducts(productSearch);
+      this.router.navigate(['/product-list'], { relativeTo: this.route });
+    })
+    .catch(error => {
+      console.error('Translation failed:', error);
+    });
+}
 
   /* Bellow code is for pagination, sorting */
 
