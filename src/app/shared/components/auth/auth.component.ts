@@ -43,11 +43,9 @@ export class AuthComponent implements OnInit{
     if(this.isLoginMode){
       authObservable = this.authService.login(email, password);
     }else{
-      const updatedUser: UserSettings = {
-        userFirstName : form.value.firstName,
-        userLastName : form.value.lastName
-      };
-      
+      const updatedUser = new UserSettings();
+      updatedUser.userFirstName = form.value.firstName;
+      updatedUser.userLastName = form.value.lastName;
       console.log('userSettings :', updatedUser);
       if (password !== confirmPassword) {
         this.error = 'Passwords do not match!';

@@ -4,6 +4,11 @@
 
     <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="address-form">
       <h2 class="section-title">Shipping Address</h2>
+            <div class="button-group">
+        <button type="button" (click)="cancel()">Back</button>
+        <button type="submit">Save and Next</button>
+      </div>
+      <br>
       <div class="salutation-buttons">
          <button *ngFor="let option of genderOptions" type="button"
             [ngClass]="{'selected': addressForm.get('salutation')?.value === option}"
@@ -23,10 +28,6 @@
       <input formControlName="state" placeholder="Stadt *" />
       <input formControlName="phone" placeholder="Telefonnummer *" />
 
-      <div class="button-group">
-        <button type="button" (click)="cancel()">Cancel</button>
-        <button type="submit">Save and Next</button>
-      </div>
     </form>
   </div>
 

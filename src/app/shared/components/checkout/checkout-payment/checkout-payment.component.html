@@ -3,6 +3,11 @@
     <app-checkout-progress [currentStep]="2"></app-checkout-progress>
 
     <h2 class="section-title">Choose payment method</h2>
+    <div class="button-group">
+      <button (click)="backToAddress()">Back</button>
+      <button (click)="proceed()" [disabled]="!selectedPayment&&!savedPayment">Save and Next</button> 
+    </div>
+    <br>
     <div class="payment-options">
       <button 
         *ngFor="let option of paymentOptions"
@@ -12,10 +17,6 @@
       </button>
     </div>
 
-    <div class="button-group">
-      <button (click)="backToAddress()">Back</button>
-      <button (click)="proceed()" [disabled]="!selectedPayment">Proceed</button> 
-    </div>
   </div>
 
   <div class="checkout-right">
