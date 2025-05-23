@@ -20,6 +20,7 @@ export class SettingsComponent implements OnInit {
   photoForm: FormGroup;
   addressForm: FormGroup;
   profileForm: FormGroup;
+  paymentMethodForm: FormGroup;
 
   userEmail = 'guest.user@gmail.com';
   photoPreview: string | ArrayBuffer | null = null;
@@ -83,6 +84,7 @@ export class SettingsComponent implements OnInit {
     let tiktok = '';
     let twitterUserName = '';
     let youtube = '';
+    let preferredPaymentMethod = '';
 
     if (this.userSettings !== undefined) {
       streetAddress = this.userSettings.streetAddress ?? '';
@@ -106,6 +108,7 @@ export class SettingsComponent implements OnInit {
       tiktok = this.userSettings.tiktokUserName ?? '';
       twitterUserName = this.userSettings.twitterUserName ?? '';
       youtube = this.userSettings.youtubeUserName ?? '';
+      preferredPaymentMethod = this.userSettings.preferredPaymentMethod ?? '';
     }
 
     this.photoForm = this.fb.group({
@@ -150,6 +153,10 @@ export class SettingsComponent implements OnInit {
       twitterUserName: [twitterUserName],
       youtubeUserName: [youtube],
     });
+
+    this.paymentMethodForm = this.fb.group({
+      preferredPaymentMethod : [preferredPaymentMethod]
+    })
   }
 
   selectMenu(item: string) {
@@ -256,5 +263,14 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  onAddPaymentMethod() {}
+  onAddPaymentMethod() {
+        if (this.paymentMethodForm.valid) {
+      const updatedUser: UserSettings = {
+        ...this.userSettings, 
+        ...this.paymentMethodForm.value, 
+      };
+      console.log(' paymentMethodForm updatedUser :', updatedUser);
+      this.settingsService.updateUser(updatedUser);
+    }
+  }
 }

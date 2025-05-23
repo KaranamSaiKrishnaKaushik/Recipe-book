@@ -2,10 +2,14 @@
   <div class="checkout-left">
     <app-checkout-progress [currentStep]="3"></app-checkout-progress>
 
-    <!-- <h2 class="section-title">Order overview</h2> -->
-
+    <h2 class="section-title">Overview</h2>
+    <div class="button-group">
+      <button (click)="backToPayment()">Back</button>
+    </div>
+    <br>
     <div class="review-box">
       <h3>Billing address</h3>
+
       <p> {{ address.firstName }} {{ address.lastName }}</p>
       <!-- {{ address.salutation }} -->
       <p>{{ address.street }} {{ address.houseNumber }}</p>
@@ -17,11 +21,6 @@
     <div class="review-box">
       <h3>Payment method</h3>
       <p>{{ paymentMethod }}</p>
-    </div>
-
-    <div class="button-group">
-      <button (click)="backToPayment()">Back</button>
-      <!-- <button (click)="placeOrder()" >Proceed</button>  -->
     </div>
   </div>
 

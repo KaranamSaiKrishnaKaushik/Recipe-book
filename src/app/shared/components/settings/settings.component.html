@@ -224,10 +224,25 @@
   <div class="settings-content" *ngIf="selectedMenu === 'Payment methods'">
     <h2>Payment methods</h2>
     <hr />
-    <p>You don't have any yet. Feel free to add payment methods</p>
-    <button class="primary-btn" (click)="onAddPaymentMethod()">
+    <!-- <p>You don't have any yet. Feel free to add payment methods</p> -->
+    <!-- <button class="primary-btn" (click)="onAddPaymentMethod()">
         Add Payment method
-      </button>
+      </button> -->
+      <form [formGroup]="paymentMethodForm" (ngSubmit)="onAddPaymentMethod()">
+      <div class="form-group">
+        <label>Preferred Payment Method</label>
+<!-- 
+        <input type="text" formControlName="salutation" /> -->
+        <select formControlName="preferredPaymentMethod">
+          <option value="PayPal">Paypal</option>
+          <option value="Google Pay">Google Pay</option>
+          <option value="Apple Pay">Apple Pay</option>
+          <option value="SEPA">SEPA</option>
+          <option value="Credit Card">Credit Card</option>
+        </select>
+      </div>
+      <button class="primary-btn" type="submit">Save Payment method</button>
+      </form>
   </div>
 
   <div class="settings-content" *ngIf="selectedMenu === 'Close account'">
