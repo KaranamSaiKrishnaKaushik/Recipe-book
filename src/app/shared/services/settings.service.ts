@@ -51,7 +51,8 @@ export class SettingsService {
         .subscribe(
            user=>{
             console.log(user);
-            this.userSubject.next(user);
+            const userInstance = UserSettings.fromObject(user);
+            this.userSubject.next(userInstance);
            }
         );
     }

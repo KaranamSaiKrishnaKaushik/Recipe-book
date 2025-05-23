@@ -38,11 +38,11 @@
 
 .button-group button {
   min-width: 5rem;
-  padding: 0.75rem 1.55rem;
-  background-color: var(--color-primary); /*#d00;*/
-  color: var(--color-background-primary);/*white;*/
+  padding:  var(--button-padding);
+  background-color: var(--color-primary);
+  color: var(--color-background-primary);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--button-radius);
   cursor: pointer;
 }
 
