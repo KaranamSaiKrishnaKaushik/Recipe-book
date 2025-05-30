@@ -1,44 +1,43 @@
-import { Injectable} from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, from, Subject, throwError } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { AuthService as Auth0Service } from '@auth0/auth0-angular';
 import { User } from './user.model';
-import { ProviderUserInfo } from './provider-user-info.model';
-import {
-  getAuth,
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  updatePassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-} from 'firebase/auth';
 import { UserSettings } from '../../models/user-settings.model';
 import { SettingsService } from '../../services/settings.service';
-
- export interface AuthResponseData {
-   idToken: string;
-   email: string;
-   refreshToken: string;
-   expiresIn: string;
-   localId: string;
-   registered?: boolean;
-   passwordHash?: string;
-   providerUserInfo?: ProviderUserInfo[];
- }
+import { CartService } from '../../services/cart.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
-  currentUser: any;
-  constructor(private http: HttpClient, private router: Router, private settingService: SettingsService) {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      this.currentUser = user;
-      console.log('Auth user is:', user);
+
+  constructor(
+    private auth0: Auth0Service,
+    private router: Router,
+    private settingService: SettingsService,
+    private cartService: CartService
+  ) {
+    this.auth0.user$.subscribe((auth0User) => {
+      if (auth0User) {
+        const exp = auth0User['exp'] || Math.floor(Date.now() / 1000) + 3600;
+        const expirationDate = new Date(exp * 1000); 
+        const email = auth0User.email;
+        const sub = auth0User.sub; 
+        const user = new User(email ?? 'unknown@example.com', sub!, '', expirationDate);
+        const isGoogle = sub?.startsWith('google-oauth2');
+        console.log('Email:', email);
+        console.log('Is Google user:', isGoogle);
+        localStorage.setItem('userEmail', JSON.stringify(email));
+        localStorage.setItem('isSocialMediaAccount', JSON.stringify(isGoogle));
+        this.user.next(user);
+        this.autoLogout(expirationDate.getTime() - Date.now());
+      }
     });
+  }
+ async getToken(): Promise<string> {
+    return await firstValueFrom(this.auth0.getAccessTokenSilently());
   }
 
   setAuthToken(token: string) {
@@ -49,154 +48,106 @@ export class AuthService {
     return localStorage.getItem('authToken');
   }
 
-  signUp(email: string, password: string, userSettings: UserSettings) {
-    const auth = getAuth();
-    return from(createUserWithEmailAndPassword(auth, email, password)).pipe(
-      catchError(this.handleError),
-      tap((userCredential) => {
-        const user = userCredential.user;
-        user.getIdToken().then((token) => {
-          this.handleAuthentication(user.email!, user.uid, token, 3600);
-          this.settingService.addUser(userSettings);
-        });
-      })
-    );
+  signUp(email: string, password: string, userSettings: UserSettings): void {
+    this.login();
   }
 
-  login(email: string, password: string) {
-    const auth = getAuth();
-    return from(signInWithEmailAndPassword(auth, email, password)).pipe(
-      catchError(this.handleError),
-      tap((userCredential) => {
-        const user = userCredential.user;
-        user.getIdToken().then((token) => {
-          this.handleAuthentication(user.email!, user.uid, token, 3600); // 1 hour expiry
-        });
-      })
-    );
+  login(): void {
+    this.auth0.loginWithRedirect({
+    authorizationParams: {
+      screen_hint: 'signup' 
+    }
+  });
   }
 
-  onChangePasswordSubmit(
-    email: string,
-    currentPassword: string,
-    newPassword: string
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      const auth = getAuth();
-      const user = this.currentUser;
+  changePassword(email: string): void {
+  const domain = environment.auth.domain;
+  const clientId = environment.auth.clientId;
 
-      if (user && email) {
-        const credential = EmailAuthProvider.credential(email, currentPassword);
-        reauthenticateWithCredential(user, credential)
-          .then(() => updatePassword(user, newPassword))
-          .then(() => {
-            resolve(true);
-          })
-          .catch((error) => {
-            console.error('Password change failed:', error.message);
-            resolve(false);
-          });
-      } else {
-        console.error('No user is currently logged in.');
-        resolve(false);
-      }
+  const url = `https://${domain}/dbconnections/change_password`;
+
+  const data = {
+    client_id: clientId,
+    email: email,
+    connection: 'Username-Password-Authentication'
+  };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+    .then(async res => {
+      const text = await res.text();
+      console.log('Password reset result:', text);
+      alert(text);
+    })
+    .catch(err => {
+      alert('Error sending password reset email.');
+      console.error(err);
     });
+}
+
+  onChangePasswordSubmit(): Promise<boolean> {
+    console.warn('Password change is handled by Auth0.');
+    alert('To change your password, please use the "Forgot password" link on the login page.');
+    return Promise.resolve(false);
   }
 
-  logout() {
+
+
+  logout(): void {
     this.user.next(null);
-    this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     localStorage.removeItem('authToken');
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-    }
+    if (this.tokenExpirationTimer) clearTimeout(this.tokenExpirationTimer);
     this.tokenExpirationTimer = null;
+
+    this.auth0.logout({ logoutParams: { returnTo: window.location.origin } });
+    this.router.navigate(['/auth']);
   }
 
-  autoLogout(expirationDuration: number) {
+  autoLogout(expirationDuration: number): void {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
 
-  private handleAuthentication(
-    email: string,
-    userId: string,
-    token: string,
-    expiresIn: number
-  ) {
-    const expirationDate = new Date(new Date().getTime() + +expiresIn * 1000);
-    const user = new User(email, userId, token, expirationDate);
-    this.user.next(user);
-    this.autoLogout(+expiresIn * 1000);
-    localStorage.setItem('userData', JSON.stringify(user));
-    this.setAuthToken(token);
-    console.log('local storage : ', localStorage.getItem('authToken'));
+  autoLogin(): void {
+    this.auth0.isAuthenticated$.subscribe((isAuth) => {
+      if (isAuth) {
+        this.auth0.user$.subscribe((auth0User) => {
+          if (auth0User) {
+            const exp = auth0User['exp'] || Math.floor(Date.now() / 1000) + 3600;
+            const expirationDate = new Date(exp * 1000);
+            const user = new User(auth0User.email ?? 'unknown@example.com', auth0User.sub!, '', expirationDate);
+            this.user.next(user);
+            this.autoLogout(expirationDate.getTime() - Date.now());
+          }
+        });
+      }
+    });
   }
 
-  autoLogin() {
-    const userDataString = localStorage.getItem('userData');
-    const userData: {
-      email: string;
-      id: string;
-      _token: string;
-      _tokenExpirationDate: string;
-    } = userDataString ? JSON.parse(userDataString) : null;
-    if (!userData) {
-      return;
-    }
-
-    const loadedUser = new User(
-      userData.email,
-      userData.id,
-      userData._token,
-      new Date(userData._tokenExpirationDate)
-    );
-
-    if (loadedUser.token) {
-      this.user.next(loadedUser);
-      const expirationDuration =
-        new Date(userData._tokenExpirationDate).getTime() -
-        new Date().getTime();
-      this.autoLogout(expirationDuration);
-    }
-  }
-
-  private handleError(errorRes: HttpErrorResponse) {
+  private handleError(error: any): never {
     let errorMessage = 'An unknown error occurred!';
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError(errorMessage);
-    }
-    switch (errorRes.error.error.message) {
-      case 'EMAIL_EXISTS': {
-        errorMessage =
-          'The email address is already in use by another account.';
-        break;
-      }
-      case 'OPERATION_NOT_ALLOWED':
-        errorMessage = 'Password sign-in is disabled for this project';
-        break;
-      case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-        errorMessage =
-          'We have blocked all requests from this device due to unusual activity. Try again later.';
-        break;
-      case 'EMAIL_NOT_FOUND': {
-        errorMessage =
-          'There is no user record corresponding to this identifier. The user may have been deleted.';
-        break;
-      }
-      case 'INVALID_LOGIN_CREDENTIALS': {
-        errorMessage =
-          ' The password is invalid or the user does not have a password.';
-        break;
-      }
-      case 'USER_DISABLED': {
-        errorMessage =
-          'The user account has been disabled by an administrator.';
-        break;
-      }
-    }
-    return throwError(errorMessage);
+    if (error.error?.message) errorMessage = error.error.message;
+    throw new Error(errorMessage);
   }
+
+  // Use Popup instead of Redirect
+loginWithPopup(): void {
+  this.auth0.loginWithPopup().subscribe({
+    next: () => {
+      this.auth0.user$.subscribe(user => {
+        console.log('User:', user);
+        this.router.navigate(['/overview']);
+      });
+    },
+    error: err => console.error(err)
+  });
+}
+
 }

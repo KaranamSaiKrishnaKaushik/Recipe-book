@@ -49,6 +49,8 @@ import { PaymentSuccessComponent } from './shared/components/checkout/payment-su
 import { NgChartsModule } from 'ng2-charts';
 import { ClickOutsideDirective } from './core/directives/click-outside.directive';
 import { AlertBoxComponent } from './core/alert-box/alert-box.component';
+import { environment } from 'src/environments/environment';
+import { AuthModule } from '@auth0/auth0-angular';
 
 @NgModule({
   declarations: [
@@ -96,7 +98,10 @@ import { AlertBoxComponent } from './core/alert-box/alert-box.component';
     MatCardModule,
     DragDropModule,
     MatIconModule,
-    NgChartsModule
+    NgChartsModule,
+    AuthModule.forRoot({
+      ...environment.auth
+    })
   ],
   providers: [
     RecipeService, 
