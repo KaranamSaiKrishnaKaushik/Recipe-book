@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpParams, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {from, Observable} from "rxjs";
 import {AuthService} from "./auth.service";
 import {exhaustMap, filter, take} from "rxjs/operators";
 
@@ -8,22 +8,19 @@ import {exhaustMap, filter, take} from "rxjs/operators";
 export class AuthInterceptorService implements HttpInterceptor{
   constructor(private authService: AuthService) {
   }
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler): Observable<HttpEvent<any>> {
-    return this.authService.user.pipe(
-      take(1),
-      exhaustMap(user => {
-        if(!user){
-          return next.handle(req);
-        }
-        const token = this.authService.getAuthToken();
-        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        const modifiedRequest = req.clone({
-          params: new HttpParams().set('auth', user.token!)
-          , headers
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  return this.authService.user.pipe(
+    take(1),
+    filter(user => !!user), // skip if user is null
+    exhaustMap(user =>
+      from(this.authService.getToken()).pipe( // convert Promise<string> to Observable<string>
+        exhaustMap(token => {
+          const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+          const modifiedRequest = req.clone({ headers });
+          return next.handle(modifiedRequest);
         })
-        return next.handle(modifiedRequest);
-      }));
-  }
+      )
+    )
+  );
+}
 }
