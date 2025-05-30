@@ -92,6 +92,11 @@
   cursor: pointer;
 }
 
+.button-group button:hover {
+  background-color: var(--color-primary-hover);  
+  border-color: var(--color-primary-hover);
+}
+
 .button-group button:disabled {
   background-color: var(--color-disabled); 
   cursor: not-allowed;

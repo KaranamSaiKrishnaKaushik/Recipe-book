@@ -46,6 +46,11 @@
   cursor: pointer;
 }
 
+.button-group button:hover {
+  background-color: var(--color-primary-hover);  
+  border-color: var(--color-primary-hover);
+}
+
 h2,h3 {
 font-family: var(--font-family-primary);
 text-align: center;

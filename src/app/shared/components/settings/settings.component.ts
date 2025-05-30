@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit {
   showAlert: boolean = false;
   alertMessage: string = '';
   alertType: string = 'success';
+  isSocialMediaAccount = false;
   menuItems = [
     'Profile',
     'Photo',
@@ -49,17 +50,24 @@ export class SettingsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isSocialMediaAccount =
+      localStorage.getItem('isSocialMediaAccount') === 'true';
+    this.userEmail =
+      JSON.parse(localStorage.getItem('userEmail') ?? '{}') || '';
     this.settingsService.getUser();
     this.settingsService.user$.subscribe((user) => {
       if (user) {
         this.userSettings = user;
-        this.userEmail =
-          JSON.parse(localStorage.getItem('userData') ?? '{}').email || '';
+        this.userEmail = JSON.parse(localStorage.getItem('userEmail') ?? '{}') || '';
+          //JSON.parse(localStorage.getItem('userData') ?? '{}').email || '';
         this.intitails = this.getInitials();
         this.fullName = this.getFullName();
         this.initForm();
       }
     });
+    if (!this.userSettings) {
+      this.initForm();
+    }
   }
 
   initForm() {
@@ -70,7 +78,7 @@ export class SettingsComponent implements OnInit {
     let state = '';
     let zipCode = '';
     let country = '';
-    let salutation='';
+    let salutation = '';
     let firstName = '';
     let lastName = '';
     let headline = '';
@@ -99,7 +107,7 @@ export class SettingsComponent implements OnInit {
       headline = this.userSettings.headline ?? '';
       biography = this.userSettings.biography ?? '';
       language = this.userSettings.language ?? '';
-      phoneNumber = this.userSettings.phoneNumber?? '';
+      phoneNumber = this.userSettings.phoneNumber ?? '';
       website = this.userSettings.website ?? '';
       facebookUserName = this.userSettings.facebookUserName ?? '';
       instagramUserName = this.userSettings.instagramUserName ?? '';
@@ -118,9 +126,9 @@ export class SettingsComponent implements OnInit {
     this.accountForm = this.fb.group(
       {
         email: new FormControl(this.userEmail),
-        currentPassword: ['', Validators.required],
+/*         currentPassword: ['', Validators.required],
         newPassword: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', Validators.required],
+        confirmPassword: ['', Validators.required], */
       },
       { validators: passwordMatchValidator }
     );
@@ -138,13 +146,13 @@ export class SettingsComponent implements OnInit {
     });
 
     this.profileForm = this.fb.group({
-      salutation: [salutation, Validators.required],  
+      salutation: [salutation, Validators.required],
       userFirstName: [firstName, Validators.required],
       userLastName: [lastName, Validators.required],
-      headline: [headline, [Validators.maxLength(60)]],
-      biography: [biography, [Validators.maxLength(1000)]],
+      headline: [headline], //, [Validators.maxLength(60)]
+      biography: [biography], // , [Validators.maxLength(1000)]
       language: ['en', Validators.required],
-      phoneNumber : [phoneNumber],
+      phoneNumber: [phoneNumber],
       website: [website],
       facebookUserName: [facebookUserName],
       instagramUserName: [instagramUserName],
@@ -155,8 +163,8 @@ export class SettingsComponent implements OnInit {
     });
 
     this.paymentMethodForm = this.fb.group({
-      preferredPaymentMethod : [preferredPaymentMethod]
-    })
+      preferredPaymentMethod: [preferredPaymentMethod],
+    });
   }
 
   selectMenu(item: string) {
@@ -178,6 +186,15 @@ export class SettingsComponent implements OnInit {
     return 'Guest User';
   }
 
+  onChangePassword() {
+    const email = this.accountForm.value.email;
+    if (email) {
+      this.authService.changePassword(email);
+    } else {
+      alert('No email found in user session.');
+    }
+  }
+
   onChangePasswordSubmit() {
     if (this.accountForm.invalid) {
       this.accountForm.markAllAsTouched();
@@ -187,26 +204,7 @@ export class SettingsComponent implements OnInit {
       const email = this.accountForm.value.email;
       const currentPassword = this.accountForm.value.currentPassword;
       const newPassword = this.accountForm.value.newPassword;
-      this.authService
-        .onChangePasswordSubmit(email, currentPassword, newPassword)
-        .then((success) => {
-          if (success) {
-            this.showAlert = true;
-            this.alertMessage =
-              'Password changed successfully. You will be logged out.';
-            this.alertType = 'success';
-            this.authService.logout();
-          } else {
-            this.showAlert = true;
-            this.alertMessage =
-              'Password change failed. Please check your current password.';
-            this.alertType = 'error';
-          }
-        })
-        .catch((error) => {
-          alert('An unexpected error occurred.');
-          console.error(error);
-        });
+      this.onChangePassword();
     }
   }
 
@@ -244,33 +242,42 @@ export class SettingsComponent implements OnInit {
   onAddressSubmit(): void {
     if (this.addressForm.valid) {
       const updatedUser: UserSettings = {
-        ...this.userSettings, 
-        ...this.addressForm.value, 
+        ...this.userSettings,
+        ...this.addressForm.value,
       };
       console.log(' address updatedUser :', updatedUser);
       this.settingsService.updateUser(updatedUser);
+            this.showAlert = true;
+      this.alertMessage = 'User address saved successfully!';
+      this.alertType = 'success';
     }
   }
 
   onProfileSubmit() {
     if (this.profileForm.valid) {
       const updatedUser: UserSettings = {
-        ...this.userSettings, 
+        ...this.userSettings,
         ...this.profileForm.value,
       };
       console.log(' profile updatedUser :', updatedUser);
       this.settingsService.updateUser(updatedUser);
+      this.showAlert = true;
+      this.alertMessage = 'User profile data saved successfully!';
+      this.alertType = 'success';
     }
   }
 
   onAddPaymentMethod() {
-        if (this.paymentMethodForm.valid) {
+    if (this.paymentMethodForm.valid) {
       const updatedUser: UserSettings = {
-        ...this.userSettings, 
-        ...this.paymentMethodForm.value, 
+        ...this.userSettings,
+        ...this.paymentMethodForm.value,
       };
       console.log(' paymentMethodForm updatedUser :', updatedUser);
       this.settingsService.updateUser(updatedUser);
+      this.showAlert = true;
+      this.alertMessage = 'User preffered payment mode saved successfully!';
+      this.alertType = 'success';
     }
   }
 }

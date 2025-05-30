@@ -1,103 +1,87 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, NgForm, Validators} from "@angular/forms";
-import {AuthService} from "./auth.service";
-import {endWith, Observable} from "rxjs";
-import {Router} from "@angular/router";
-import { UserCredential } from 'firebase/auth';
-import { passwordMatchValidator } from './password-match-validator';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  NgForm,
+  Validators,
+} from '@angular/forms';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 import { UserSettings } from '../../models/user-settings.model';
+import { AuthService as Auth0Service } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css'],
 })
-
-export class AuthComponent implements OnInit{
+export class AuthComponent implements OnInit {
   @ViewChild('authForm') aForm: NgForm;
   isLoginMode = true;
   isLoading = false;
   error: string;
   authForm: FormGroup;
-  userSettings: UserSettings;
-  constructor(private authService: AuthService,
-    private router: Router) {
-}
-  onSwitchMode(){
-    this.isLoginMode = !this.isLoginMode;
-    //this.error = null;
+
+  constructor(
+    private authService: AuthService,
+    private auth0: Auth0Service,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.auth0.isAuthenticated$.subscribe((isAuth) => {
+      if (isAuth) {
+        this.router.navigate(['/overview']);
+      } else {
+        this.authService.login();
+      }
+    });
   }
 
-  onSubmit(form: NgForm){
-    if(!form.valid){
-      return;
-    }
+  onLoginWithPopup() {
+    this.authService.loginWithPopup();
+  }
 
-    this.isLoading= true;
-    document.activeElement instanceof HTMLElement && document.activeElement.blur();
-    const email = form.value.email;
-    const password =  form.value.password;
-    const confirmPassword =  form.value.confirmPassword;
+  onSwitchMode() {
+    this.isLoginMode = !this.isLoginMode;
+  }
 
-    let authObservable: Observable<UserCredential>;
-    if(this.isLoginMode){
-      authObservable = this.authService.login(email, password);
-    }else{
-      const updatedUser = new UserSettings();
-      updatedUser.userFirstName = form.value.firstName;
-      updatedUser.userLastName = form.value.lastName;
-      console.log('userSettings :', updatedUser);
+  onSubmit(form: NgForm) {
+    if (!form.valid) return;
+
+    this.isLoading = true;
+    (document.activeElement as HTMLElement)?.blur();
+
+    if (this.isLoginMode) {
+      this.authService.login();
+    } else {
+      const { email, password, confirmPassword, firstName, lastName } =
+        form.value;
+
       if (password !== confirmPassword) {
         this.error = 'Passwords do not match!';
+        this.isLoading = false;
         return;
       }
-      authObservable = this.authService.signUp(email, password, updatedUser);
+
+      const userSettings = new UserSettings();
+      userSettings.userFirstName = firstName;
+      userSettings.userLastName = lastName;
+
+      this.authService.signUp(email, password, userSettings);
     }
-
-    authObservable.subscribe(
-      resData=>{
-        console.log(resData);
-        this.isLoading = false;
-        this.router.navigate(['overview'])
-
-      }, errorMessage=>{
-        setTimeout(() => {
-          this.error = errorMessage;
-          this.isLoading = false;
-        }, 1000);
-      });
-
-   form.reset();
   }
 
-  passwordsMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  passwordsMatchValidator(
+    control: AbstractControl
+  ): { [key: string]: boolean } | null {
     const form = control as FormGroup;
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-  
-    if (password && confirmPassword && password !== confirmPassword) {
-      return { mismatch: true };
-    }
-  
-    return null;
+
+    return password && confirmPassword && password !== confirmPassword
+      ? { mismatch: true }
+      : null;
   }
-
-  ngOnInit(): void {
-    this.authForm = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-    }, this.passwordsMatchValidator); 
-
-    setTimeout(() => {
-      if (this.aForm) {
-        this.aForm.setValue({
-          email: 'test@test.com',
-          password: 'Boston100$'
-        });
-      }
-    }, 500);
-  }
-
-
 }

@@ -127,6 +127,11 @@
            cursor: not-allowed;
          }
        }
+
+       .primary-btn:hover {
+        background-color: var(--color-primary-hover);  
+        border-color: var(--color-primary-hover);
+        }
      }
    }
 

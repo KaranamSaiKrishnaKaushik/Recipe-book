@@ -19,7 +19,7 @@
     <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
       <h4>Basics:</h4>
       <div class="form-group">
-        <label>Salutation</label>
+        <label>Salutation*</label>
 <!-- 
         <input type="text" formControlName="salutation" /> -->
         <select formControlName="salutation">
@@ -29,12 +29,12 @@
         </select>
       </div>
       <div class="form-group">
-        <label>First Name</label>
+        <label>First Name*</label>
         <input type="text" formControlName="userFirstName" />
       </div>
   
       <div class="form-group">
-        <label>Last Name</label>
+        <label>Last Name*</label>
         <input type="text" formControlName="userLastName" />
       </div>
   
@@ -51,7 +51,7 @@
       </div>
   
       <div class="form-group">
-        <label>Language</label>
+        <label>Language*</label>
         <select formControlName="language">
           <option value="en">English (US)</option>
           <option value="de">German (DE)</option>
@@ -101,50 +101,33 @@
   
       <button class="primary-btn" type="submit" [disabled]="profileForm.invalid">Save</button>
     </form>
+    <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType"
+      (close)="onCloseAlert()"></app-alert-box>
   </div>
   
 
     <div class="settings-content" *ngIf="selectedMenu === 'Account Security'">
       <h2>Account</h2>
-      <p>Edit your account settings and change your password here.</p>
-      <hr />
-      <form [formGroup]="accountForm" (ngSubmit)="onChangePasswordSubmit()">
+      <div *ngIf="!isSocialMediaAccount" class="non-social-media-account">
+        <p>Edit your account settings and change your password here.</p>
+        <form [formGroup]="accountForm" (ngSubmit)="onChangePassword()">
         <label>Email:</label>
         <div class="email-box">
           <input type="text" formControlName="email" readonly />
-          <button type="button" class="edit-btn">
-            ✎
-          </button>
         </div>
-  
-        <div class="form-group">
-          <label>Current password</label>
-          <input type="password" formControlName="currentPassword" />
-        </div>
-  
-        <div class="form-group">
-          <label>New password</label>
-          <input type="password" formControlName="newPassword" />
-        </div>
-  
-        <div class="form-group">
-          <label>Confirm new password</label>
-          <input type="password" formControlName="confirmPassword" />
-        </div>
-  
         <button type="submit" class="primary-btn" [disabled]="accountForm.invalid">Change password</button>
          <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType" (close)="onCloseAlert()"></app-alert-box>
  
       </form>
-  
-      <!-- <div class="mfa-box">
-        <h4>Multi-factor Authentication</h4>
-        <p>
-          Increase your account security by requiring that a code emailed to you be entered when you log in. For more
-          information on how multi-factor authentication works, refer to our <a href="#">Help Center article</a>.
-        </p>
-        <button class="mfa-btn">Enable</button>
-      </div> -->
+      </div>
+      <div *ngIf="isSocialMediaAccount" class="social-media-account">
+      <p>Your account is associated with google. If you wish to change your password please change your password in your google account</p>
+      <hr>
+      <form [formGroup]="accountForm" (ngSubmit)="onChangePassword()">
+        <label>Email:</label> 
+        <div>{{userEmail}}</div>
+        </form>
+      </div>
     </div>
 
 <div class="settings-content" *ngIf="selectedMenu === 'Photo'">
@@ -213,6 +196,8 @@
   
       <button class="primary-btn" type="submit" [disabled]="addressForm.invalid">Save Address</button>
     </form>
+    <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType"
+      (close)="onCloseAlert()"></app-alert-box>
   </div>
 
   <div class="settings-content" *ngIf="selectedMenu === 'Subscriptions'">
@@ -243,6 +228,8 @@
       </div>
       <button class="primary-btn" type="submit">Save Payment method</button>
       </form>
+      <app-alert-box *ngIf="showAlert" [message]="alertMessage" [type]="alertType"
+      (close)="onCloseAlert()"></app-alert-box>
   </div>
 
   <div class="settings-content" *ngIf="selectedMenu === 'Close account'">

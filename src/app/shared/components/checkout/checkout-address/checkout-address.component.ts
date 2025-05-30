@@ -47,9 +47,9 @@ export class CheckoutAddressComponent implements OnInit {
       firstName: [user.userFirstName ?? '', Validators.required],
       lastName: [user.userLastName ?? '', Validators.required],
       country: [user.country ?? '', Validators.required],
-      street: [user.streetAddress ?? '', Validators.required],
+      streetAddress: [user.streetAddress ?? '', Validators.required],
       houseNumber: [user.houseNumber ?? '', Validators.required],
-      postCode: [user.zipCode ?? '', Validators.required],
+      zipCode: [user.zipCode ?? '', Validators.required],
       state: [user.state ?? '', Validators.required],
       phone: [user.phoneNumber ?? '', Validators.required],
     });
