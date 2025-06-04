@@ -83,7 +83,6 @@ export class RecipeListComponent implements OnInit {
       try {
         const json = JSON.parse(reader.result as string);
         if (Array.isArray(json)) {
-          // Optionally add deeper validation for required fields here
           this.parsedRecipes = json;
           this.jsonError = null;
         } else {
@@ -121,4 +120,44 @@ export class RecipeListComponent implements OnInit {
       this.importError = 'Invalid JSON format. Please correct it and try again.';
     }
   }
+
+  copyJson() {
+  const jsonElement = document.getElementById('jsonPrompt');
+  if (jsonElement) {
+    const text = jsonElement.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('JSON copied to clipboard!');
+    }).catch(err => {
+      alert('Failed to copy JSON.');
+      console.error(err);
+    });
+  }
+}
+
+
+  jsonExample: string = `[
+  {
+    "name": "Margherita Pizza",
+    "description": "A classic Italian pizza topped with fresh tomatoes, mozzarella cheese, and fragrant basil leaves.",
+    "imagePath": "https://media.istockphoto.com/...",
+    "instructions": "1. Make pizza dough and rest for 1 hour. ...",
+    "category": "Pizza",
+    "ingredients": [
+      { "baseName": { "name": "Mozzarella" }, "amount": 2 },
+      { "baseName": { "name": "Tomato Sauce" }, "amount": 1 }
+    ]
+  },
+  {
+    "name": "Pepperoni Pizza",
+    "description": "An all-time favorite with melted cheese...",
+    "imagePath": "https://as2.ftcdn.net/...",
+    "instructions": "1. Prepare dough. 2. Preheat oven...",
+    "category": "Pizza",
+    "ingredients": [
+      { "baseName": { "name": "Pepperoni" }, "amount": 20 },
+      { "baseName": { "name": "Mozzarella" }, "amount": 2 }
+    ]
+  }
+]`;
+
 }

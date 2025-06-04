@@ -63,7 +63,7 @@ export class ProductListService implements OnInit {
 
   translateToGerman(englishText: string): Promise<string> {
     return lastValueFrom(
-      this.httpClient.post<any>(this.url + 'api/translate', {
+      this.httpClient.post<any>(this.url + 'api/products/translate', {
         text: englishText,
       })
     ).then((response) => response.translatedText);

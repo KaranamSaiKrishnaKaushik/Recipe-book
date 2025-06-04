@@ -11,9 +11,9 @@ export class AuthInterceptorService implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   return this.authService.user.pipe(
     take(1),
-    filter(user => !!user), // skip if user is null
+    filter(user => !!user),
     exhaustMap(user =>
-      from(this.authService.getToken()).pipe( // convert Promise<string> to Observable<string>
+      from(this.authService.getToken()).pipe(
         exhaustMap(token => {
           const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
           const modifiedRequest = req.clone({ headers });
