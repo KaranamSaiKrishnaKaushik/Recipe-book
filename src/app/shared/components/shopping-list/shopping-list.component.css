@@ -61,7 +61,7 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-h4,th,td {
+h1,h4,th,td {
 font-family: var(--font-family-primary);
 text-align: center;
 }
@@ -72,4 +72,17 @@ text-align: center;
 
 ::ng-deep .custom-toggle.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
   background-color: var(--color-toggle-off); 
+}
+
+.empty-order-history-container {
+    max-height: calc(100vh - 150px); 
+    overflow-y: auto;
+    padding-top: 150px;
+    padding-right: 10px; /* optional: spacing for scrollbar */
+}
+
+h2 {
+    font-family: "Pacifico", cursive !important;
+    font-optical-sizing: auto;
+    text-align: center;
 }

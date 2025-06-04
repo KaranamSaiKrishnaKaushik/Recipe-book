@@ -49,13 +49,18 @@ export class AuthService {
   }
 
   signUp(email: string, password: string, userSettings: UserSettings): void {
-    this.login();
+    //this.login();
+    this.auth0.loginWithRedirect({
+    authorizationParams: {
+      screen_hint: 'signup' 
+    }
+  });
   }
 
   login(): void {
     this.auth0.loginWithRedirect({
     authorizationParams: {
-      screen_hint: 'signup' 
+      screen_hint: 'login' 
     }
   });
   }
@@ -106,8 +111,25 @@ export class AuthService {
     this.tokenExpirationTimer = null;
 
     this.auth0.logout({ logoutParams: { returnTo: window.location.origin } });
-    this.router.navigate(['/auth']);
+    //this.router.navigate(['/auth']);
   }
+
+/*   logout(): void {
+  this.user.next(null);
+  localStorage.removeItem('userData');
+  localStorage.removeItem('authToken');
+
+  if (this.tokenExpirationTimer) clearTimeout(this.tokenExpirationTimer);
+  this.tokenExpirationTimer = null;
+
+  const loginUrl = `${window.location.origin}/login?screen_hint=login`;
+
+  this.auth0.logout({
+    logoutParams: {
+      returnTo: loginUrl // or a custom hosted Auth0 login page
+    }
+  });
+} */
 
   autoLogout(expirationDuration: number): void {
     this.tokenExpirationTimer = setTimeout(() => {

@@ -1,10 +1,26 @@
-<div class="card-grid">
+<div *ngIf="recipes.length === 0" class="empty-recipes-container">
+  <h2 class="no-items-text">You have not added any of your recipes yet! Here's a quick intro to get started:</h2>
 
-  <app-card *ngFor="let recipe of recipes; let i = index" [title]="recipe.name"
-    [content]="truncate(recipe.description, 20)" [footer]="'Pizza'" [imageUrl]="recipe.imagePath"
+  <div class="video-wrapper">
+    <iframe 
+      src="https://www.youtube.com/embed/OuY-zJy_fBw?rel=0&modestbranding=1&autoplay=1&mute=1&controls=1"
+      frameborder="0" 
+      allowfullscreen
+      loading="lazy">
+    </iframe>
+  </div>
+</div>
+
+<div class="card-grid" *ngIf="recipes.length > 0"> 
+  <app-card *ngFor="let recipe of recipes; let i = index"
+    [title]="recipe.name"
+    [content]="truncate(recipe.description, 20)"
+    [footer]="'Pizza'"
+    [imageUrl]="recipe.imagePath"
     (cardClick)="onCardSelected(recipe)">
   </app-card>
 </div>
+
 
 <div class="overlay" *ngIf="selectedCard">
 
