@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CartService } from 'src/app/shared/services/cart.service';
 import {
   CheckoutService,
   PaymentOrderDetails,
@@ -21,7 +22,8 @@ export class PaymentSuccessComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private checkoutService: CheckoutService
+    private checkoutService: CheckoutService,
+    private cartService: CartService
   ) {
     this.orderNumber = '#246258';
     this.date = '07/10/2024';
@@ -30,8 +32,9 @@ export class PaymentSuccessComponent implements OnInit {
     this.email = 'kc@cactus.co';
   }
   ngOnInit(): void {
-    this.email = JSON.parse(localStorage.getItem('userData') ?? '{}').email || '';
+    this.email = JSON.parse(localStorage.getItem('userEmail') ?? '{}');
     this.checkoutService.orderDetails$.subscribe((order) => {
+      this.cartService.loadCartFromApi();
       if (order) {
         console.log('New order:', order);
         this.paymentOrderDetails = order;
@@ -40,7 +43,6 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   viewInvoice() {
-    // Navigate or open PDF
     window.open('/assets/invoice.pdf', '_blank');
   }
 }

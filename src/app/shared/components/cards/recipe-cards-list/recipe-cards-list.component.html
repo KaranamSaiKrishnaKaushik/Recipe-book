@@ -15,7 +15,7 @@
   <app-card *ngFor="let recipe of recipes; let i = index"
     [title]="recipe.name"
     [content]="truncate(recipe.description, 20)"
-    [footer]="'Pizza'"
+    [footer]="recipe.category"
     [imageUrl]="recipe.imagePath"
     (cardClick)="onCardSelected(recipe)">
   </app-card>

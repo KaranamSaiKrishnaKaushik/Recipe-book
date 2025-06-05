@@ -85,6 +85,7 @@ export class SettingsComponent implements OnInit {
     let biography = '';
     let language = '';
     let phoneNumber = '';
+    let emailId = JSON.parse(localStorage.getItem('userEmail') ?? '{}');
     let website = '';
     let facebookUserName = '';
     let instagramUserName = '';
@@ -108,6 +109,7 @@ export class SettingsComponent implements OnInit {
       biography = this.userSettings.biography ?? '';
       language = this.userSettings.language ?? '';
       phoneNumber = this.userSettings.phoneNumber ?? '';
+      emailId = emailId ?? '';
       website = this.userSettings.website ?? '';
       facebookUserName = this.userSettings.facebookUserName ?? '';
       instagramUserName = this.userSettings.instagramUserName ?? '';
@@ -125,10 +127,7 @@ export class SettingsComponent implements OnInit {
 
     this.accountForm = this.fb.group(
       {
-        email: new FormControl(this.userEmail),
-/*         currentPassword: ['', Validators.required],
-        newPassword: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', Validators.required], */
+        email: new FormControl(this.userEmail)
       },
       { validators: passwordMatchValidator }
     );
@@ -149,10 +148,11 @@ export class SettingsComponent implements OnInit {
       salutation: [salutation, Validators.required],
       userFirstName: [firstName, Validators.required],
       userLastName: [lastName, Validators.required],
-      headline: [headline], //, [Validators.maxLength(60)]
-      biography: [biography], // , [Validators.maxLength(1000)]
+      headline: [headline],
+      biography: [biography],
       language: ['en', Validators.required],
       phoneNumber: [phoneNumber],
+      emailId : [emailId],
       website: [website],
       facebookUserName: [facebookUserName],
       instagramUserName: [instagramUserName],

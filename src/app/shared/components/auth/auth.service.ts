@@ -4,20 +4,15 @@ import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { AuthService as Auth0Service } from '@auth0/auth0-angular';
 import { User } from './user.model';
 import { UserSettings } from '../../models/user-settings.model';
-import { SettingsService } from '../../services/settings.service';
-import { CartService } from '../../services/cart.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User | null>(null);
   private tokenExpirationTimer: any;
-
   constructor(
     private auth0: Auth0Service,
-    private router: Router,
-    private settingService: SettingsService,
-    private cartService: CartService
+    private router: Router
   ) {
     this.auth0.user$.subscribe((auth0User) => {
       if (auth0User) {
@@ -36,6 +31,7 @@ export class AuthService {
       }
     });
   }
+
  async getToken(): Promise<string> {
     return await firstValueFrom(this.auth0.getAccessTokenSilently());
   }
@@ -111,25 +107,7 @@ export class AuthService {
     this.tokenExpirationTimer = null;
 
     this.auth0.logout({ logoutParams: { returnTo: window.location.origin } });
-    //this.router.navigate(['/auth']);
   }
-
-/*   logout(): void {
-  this.user.next(null);
-  localStorage.removeItem('userData');
-  localStorage.removeItem('authToken');
-
-  if (this.tokenExpirationTimer) clearTimeout(this.tokenExpirationTimer);
-  this.tokenExpirationTimer = null;
-
-  const loginUrl = `${window.location.origin}/login?screen_hint=login`;
-
-  this.auth0.logout({
-    logoutParams: {
-      returnTo: loginUrl // or a custom hosted Auth0 login page
-    }
-  });
-} */
 
   autoLogout(expirationDuration: number): void {
     this.tokenExpirationTimer = setTimeout(() => {
@@ -159,7 +137,6 @@ export class AuthService {
     throw new Error(errorMessage);
   }
 
-  // Use Popup instead of Redirect
 loginWithPopup(): void {
   this.auth0.loginWithPopup().subscribe({
     next: () => {
