@@ -35,6 +35,19 @@ export class SettingsService {
     );
     }
 
+    updateSocialUserEmailId(emailId: string){
+    const body = {
+      EmailId : emailId
+    }
+    this.httpClient
+    .put(this.url+'update-user-email', body)
+    .subscribe(
+       response=>{
+        console.log(response);
+       }
+    );
+    }
+
     getUser(){
         this.httpClient
         .get(this.url+'get-user')

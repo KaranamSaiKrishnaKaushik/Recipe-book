@@ -109,6 +109,7 @@ export class CheckoutReviewComponent implements OnInit {
                       localStorage.removeItem('productPrice');
                       localStorage.removeItem('pfandPrice');
                       localStorage.removeItem('paymentMode');
+                      this.cartService.loadCartFromApi();
                   //alert('Transaction of '+ amount +' '+ currency+' completed by ' + details.payer.name.given_name);
                   this.toPaymentSuccess();
                 })
