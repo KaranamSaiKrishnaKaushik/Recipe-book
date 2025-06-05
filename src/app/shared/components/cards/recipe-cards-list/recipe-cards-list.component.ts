@@ -1,17 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../../../services/recipe.service';
 import { Recipe } from '../../../models/recipe.model';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { environment } from 'src/environments/environment';
 import pdfMake from 'src/app/utils/pdfmake-wrapper';
 import type { TDocumentDefinitions } from 'pdfmake/interfaces';
-
-interface Ingredient {
-  baseName: {
-    name: string;
-  }
-}
+import { SettingsService } from 'src/app/shared/services/settings.service';
+import { CartService } from 'src/app/shared/services/cart.service';
+import { Product } from '../../product-list/product.model';
 
 @Component({
   selector: 'app-recipe-cards-list',
@@ -20,16 +15,29 @@ interface Ingredient {
 })
 export class RecipeCardsListComponent implements OnInit {
   selectedCard: Recipe | any;
-  constructor(private recipeService: RecipeService) {}
+  constructor(
+    private recipeService: RecipeService, 
+    private settingsService: SettingsService,
+    private cartService : CartService) {}
   url = environment.apiUrl;
   recipes: Recipe[] = [];
-
+  //cartItems: Product[] = [];
   ngOnInit(): void {
     this.recipes = this.recipeService.getRecipes();
 
     this.recipeService.recipesChanged.subscribe((recipes: Recipe[]) => {
       this.recipes = recipes;
     });
+
+    this.cartService.loadCartFromApi();
+  //  this.cartService.cart$.subscribe((cartItems) => {
+  //     this.cartItems = cartItems;
+  //   });
+
+    if(localStorage.getItem('isSocialMediaAccount')){
+     const email = JSON.parse(localStorage.getItem('userEmail') ?? '{}') || '';
+     this.settingsService.updateSocialUserEmailId(email);
+    }
   }
 
   onCardSelected(recipe: Recipe) {
