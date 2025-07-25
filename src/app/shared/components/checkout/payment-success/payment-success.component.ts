@@ -32,7 +32,8 @@ export class PaymentSuccessComponent implements OnInit {
     this.email = 'kc@cactus.co';
   }
   ngOnInit(): void {
-    this.email = JSON.parse(localStorage.getItem('userEmail') ?? '{}');
+    const email = localStorage.getItem('userEmail');
+    this.email = email ? JSON.parse(email) : '';
     this.checkoutService.orderDetails$.subscribe((order) => {
       this.cartService.loadCartFromApi();
       if (order) {
