@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
   prodFoundSubscription: Subscription;
 
   ngOnInit(): void {
-    this.loadProducts(); // Load first page on init
+    this.loadProducts();
 
     this.prodFoundSubscription = this.plService.productsFoundChanged.subscribe(
       (productsFound: Product[]) => {
@@ -165,6 +165,9 @@ export class ProductListComponent implements OnInit {
   }
 
   getBrandLogoUrl(sourceName: string): string {
+    if (!sourceName) {
+        return '';
+    }
     switch (sourceName.toUpperCase()) {
       case 'REWE':
         return 'https://upload.wikimedia.org/wikipedia/commons/5/5a/REWE_Dein_Markt-Logo_neu.png';

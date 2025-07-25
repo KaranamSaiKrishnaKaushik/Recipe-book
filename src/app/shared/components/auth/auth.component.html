@@ -20,10 +20,10 @@
         <p>{{error}}</p>
       </div>
       <div *ngIf="isLoading && isLoginMode" style="text-align: center">
-        <app-loading-spinner></app-loading-spinner>
+        <!-- <app-loading-spinner></app-loading-spinner> -->
       </div>
       <div *ngIf="authForm && isLoginMode">
-        <form (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">	 	 
+        <!-- <form (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">	 	 
           <div class="form-group">
             <label for="email">E-Mail</label>
             <input
@@ -57,7 +57,7 @@
           <div>
             <button type="submit" class="btn-submit" [disabled]="!authForm.valid">Login</button>
           </div>
-        </form>
+        </form> -->
       </div>
       <hr />
 
@@ -72,10 +72,10 @@
         </span>
       </p>
       <div *ngIf="isLoading && !isLoginMode" style="text-align: center">
-        <app-loading-spinner></app-loading-spinner>
+        <!-- <app-loading-spinner></app-loading-spinner> -->
       </div>
       <div *ngIf="authForm && !isLoginMode">
-        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+        <!-- <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
           <div class="form-row">
             <div class="form-group">
               <label for="firstName">First Name</label>
@@ -146,7 +146,7 @@
             </div>
           </div>
           <button type="submit" class="btn-submit" [disabled]="!authForm.valid">Register</button>
-        </form>
+        </form> -->
       </div>
     </div>
   </div>

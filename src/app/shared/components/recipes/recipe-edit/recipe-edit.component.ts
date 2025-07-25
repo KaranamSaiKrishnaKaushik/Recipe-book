@@ -71,19 +71,19 @@ export class RecipeEditComponent implements OnInit {
       recipeInstructions = recipe.instructions;
       recipeCategory = recipe.category;
       if (recipe.ingredients) {
-for(let ingredient of recipe.ingredients){
-  recipeIngredients.push(
-    new FormGroup({
-      baseName: new FormGroup({
-        name: new FormControl(ingredient.baseName.name, Validators.required)
-      }, { updateOn: 'submit' }),
-      amount: new FormControl(ingredient.amount, [
-        Validators.required,
-        Validators.pattern(/^[1-9]+[0-9]*$/)
-      ])
-    }, { updateOn: 'submit' })
-  );
-}
+        for (let ingredient of recipe.ingredients) {
+          recipeIngredients.push(
+            new FormGroup({
+              baseName: new FormGroup({
+                name: new FormControl(ingredient.baseName.name, Validators.required)
+              }, { updateOn: 'submit' }),
+            amount: new FormControl(ingredient.amount, [
+            Validators.required,
+            Validators.pattern(/^[1-9]+[0-9]*$/)
+          ])
+      }, { updateOn: 'submit' })
+      );
+      }
       }
     }
     this.recipeForm = new FormGroup(
@@ -182,7 +182,7 @@ showSuccessAlert(alertTypeText: string){
     }, 150);
   }
 
-  private markFormGroupTouched(formGroup: FormGroup | FormArray) {
+  public markFormGroupTouched(formGroup: FormGroup | FormArray) {
   Object.values(formGroup.controls).forEach(control => {
     if (control instanceof FormControl) {
       control.markAsTouched();

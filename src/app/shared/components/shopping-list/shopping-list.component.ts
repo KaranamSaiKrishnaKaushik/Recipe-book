@@ -75,7 +75,7 @@ export class ShoppingListComponent implements OnInit, AfterViewInit {
       this.prepareTopProducts(history);
       this.prepareSpendingByStore(history);
       this.prepareAveragePricePerCategory(history);
-  }
+      }
     });
   }
 
@@ -360,7 +360,7 @@ prepareTopProducts(history: any[]) {
   ngAfterViewInit() {
     this.updatePagination();
     this.dataSource.filterPredicate = this.createFilter();
-
+/* 
     if (typeof paypal !== 'undefined') {
       this.loadPaypalScript().then(() => {
         paypal
@@ -410,11 +410,11 @@ prepareTopProducts(history: any[]) {
       });
     } else {
       console.error('PayPal SDK not loaded.');
-    }
+    } */
   }
 
   /* bellow code is for paypal */
-  loadPaypalScript(): Promise<void> {
+/*   loadPaypalScript(): Promise<void> {
     return new Promise((resolve) => {
       if ((window as any).paypal) {
         resolve();
@@ -429,6 +429,6 @@ prepareTopProducts(history: any[]) {
       script.onload = () => resolve();
       document.body.appendChild(script);
     });
-  }
+  } */
 }
 
